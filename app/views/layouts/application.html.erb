@@ -6,10 +6,21 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+
+  <style>
+    canvas {
+      height: 100vh;
+      width: 100vw;
+    }
+  </style>
+  
 </head>
 <body>
 
-<%= yield %>
+	<%= yield %>
 
+	<canvas id="myCanvas" resize></canvas>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.24/paper-full.min.js"></script>
 </body>
 </html>

@@ -1,27 +1,40 @@
+var drawLineTimers = []; // Array of timers.
+var branches = []; // Array of branches
 
-
-var drawLine = function() {
+var newBranch = function( origin, direction ) { // Two objects that contain x and y coords
   var path = new paper.Path();
   path.strokeColor = 'black';
-
-  var start = new paper.Point(100, 100); 
+  var start = new paper.Point( origin.x, origin.y );  
   path.moveTo(start);
-  var X = 10;
-  var Y = 10;
+
+  var branch = {
+    path: path,
+    start: start,
+    direction: direction
+  }
+
+  branches.push(branch);
+};
+
+var drawLine = function() {
+  var durationLine = {
+    x: 0,
+    y: 0,
+  };
+
+  newBranch( durationLine, { x: 1, y: 1 } );
+  newBranch( durationLine, { x: 3, y: 2 } );
+  newBranch( durationLine, { x: 3, y: 4 } );
 
   var drawLineTimer = setInterval( function() {
-    if ( branchListener() ) {
-      X = (Math.random() * (21)) - 10;
-      Y = (Math.random() * (21)) - 10;
-      path.lineTo(start.add([ X, Y ]));
-      start = start.add([ X, Y ]);
-      clickedFlag = false;
-    } else {
-      path.lineTo(start.add([ X, Y ]));
-      start = start.add([ X, Y]);
+    for ( x = 0; x < branches.length; x++ ) {
+      branches[x].path.lineTo(branches[x].start.add(branches[x].direction));
+      branches[x].start = branches[x].start.add(branches[x].direction);
     }
     paper.view.draw();
   }, 50);
+
+  drawLineTimers.push(drawLineTimer);
 };
 
 var clickedFlag = false;

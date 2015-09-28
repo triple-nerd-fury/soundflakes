@@ -25,9 +25,19 @@ class PagesController < ApplicationController
 		# get a tracks oembed data
 		track_url = 'https://api.soundcloud.com/tracks/220068021'
 		embed_info = client.get('/oembed', :url => track_url)
+		# stream_url = client.get(track.stream_url, :allow_redirects => true);
+		# puts stream_url.location
 
 		# print the html for the player widget
 		@embed = embed_info['html']
-		binding.pry
+
+		@track_url = track_url
+		client_id = 'dea3c2dce5d40ad0ee8ef7c8275d8dd5'
+		# get 10 hottest tracks
+		track = client.get('/tracks', :limit => 1, :order => 'hotness')
+		track_uri = track[0].uri 
+		@track_stream = "#{track_uri}/stream?client_id=#{client_id}"
+	
+	
 	end
 end

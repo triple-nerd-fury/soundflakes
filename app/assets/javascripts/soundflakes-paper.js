@@ -1,7 +1,8 @@
-var drawLineTimers = []; // Array of timers.
+var renderTimers = []; // Array of timers.
 var branches = []; // Array of branches
 var branchLimit = 5;
 var branchMaxSpeed = 0.3;
+var renderTimer = null;
 
 // CLICK EVENT
 var clickedFlag = false;
@@ -59,7 +60,7 @@ var init = function() { // Initializes starting points/branches
 
 var renderLines = function() {
 
-  var drawLineTimer = setInterval( function() {
+  renderTimer = setInterval( function() {
     for ( x = 0; x < branches.length; x++ ) {
       var newLocation = branches[x].location.add(branches[x].direction);
       branches[x].move();
@@ -67,7 +68,7 @@ var renderLines = function() {
     paper.view.draw();
   }, 50);
 
-  drawLineTimers.push(drawLineTimer);
+  renderTimers.push(renderTimer);
 };
 
 $(document).ready(function() {
@@ -79,6 +80,7 @@ $(document).ready(function() {
       clickedFlag = true;
     }
   });
+
   paper.install(window);
 
   window.onload = function () {

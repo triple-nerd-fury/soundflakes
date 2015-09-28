@@ -6,6 +6,7 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <script src="//connect.soundcloud.com/sdk-2.0.0.js"></script>
 
   <style>
     #myCanvas {
@@ -14,15 +15,18 @@
     }
   </style>
   
-
-    <style>
-div#mp3_player{ width:500px; height:60px; background:#000; padding:5px; margin:50px auto; }
-div#mp3_player > div > audio{  width:500px; background:#000; float:left;  }
-div#mp3_player > canvas{ width:500px; height:30px; background:#002D3C; float:left; }
-</style>
-
 </head>
 <body>
+  <h1>Soundflakes</h1>
+  <nav id="global-nav">
+      <ul>
+      <%= link_to(soundcloud_path) do %>
+        <li>Soundcloud Login</li>
+      <% end %>
+    </ul>
+  </nav>
+
+  <div id="main"></div>
 
 	<%= yield %>
 

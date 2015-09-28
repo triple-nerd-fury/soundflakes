@@ -1,15 +1,24 @@
 <div id="main"></div>
 
-<div id="appViewTemplate">
-	<nav id="global-nav">
-	</nav>
-</div>
+<script id="appViewTemplate" type="javascript/underscore">
+  <form>
+    <input id="songSearchInput" type="text" placeholder="Enter a song name"></input>
+    <button> Search Song </button>
+  </form>
+</script>
 
-<script id="sideBarViewTemplate" type="text/underscore">
-		<h1>Soundflakes</h1>
-		<ul>
-			<%= link_to('root_path') do %>
-				<li>Home</li>
-			<% end %>
-		</ul>
+<script id="searchResultsTemplate" type="javascript/underscore">
+	<div id="searchResults">
+	</div>
+</script>
+
+<script id="resultTemplate" type="javascript/underscore">
+	<a class="result-name"></a>
+</script>
+
+<script id="snowflakeTemplate" type="javascript/underscore">
+	<div id="mp3_player">
+	  <div id="audio_box"></div>
+	  <canvas id="analyser_render"></canvas>
+	</div>
 </script>

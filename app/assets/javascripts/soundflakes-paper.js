@@ -1,6 +1,7 @@
 var drawLineTimers = []; // Array of timers.
 var branches = []; // Array of branches
 var branchLimit = 5;
+var branchMaxSpeed = 0.3;
 
 // CLICK EVENT
 var clickedFlag = false;
@@ -22,8 +23,8 @@ var Branch = function( path, origin, direction ) {
       for( x = 0; x < branchLimit; x++ ) {
         var index = Math.floor(Math.random() * branches.length);
         if ( branches[index] ) {
-          var randomX = (Math.random() * 6) - 2;
-          var randomY = (Math.random() * 6) - 2;
+          var randomX = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+          var randomY = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
           newBranch( { x: branches[index].location.x, y: branches[index].location.y }, { x: randomX, y: randomY } );
         }
       }
@@ -50,8 +51,8 @@ var newBranch = function( origin, direction ) { // Two objects that contain x an
 };
 
 var init = function() { // Initializes starting points/branches
-  var durationLine = { x: 0, y: 0 };
-  newBranch( durationLine, { x: 3, y: 3 } );
+  var durationLine = { x: 300, y: 300 };
+  newBranch( durationLine, { x: 0.1, y: 0.1 } );
 
   renderLines();
 };
@@ -86,4 +87,3 @@ $(document).ready(function() {
     init();
   };
 });
-

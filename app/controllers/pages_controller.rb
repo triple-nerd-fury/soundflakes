@@ -34,8 +34,9 @@ class PagesController < ApplicationController
 		@track_url = track_url
 		client_id = 'dea3c2dce5d40ad0ee8ef7c8275d8dd5'
 		# get 10 hottest tracks
-		track = client.get('/tracks', :limit => 1, :order => 'hotness')
-		track_uri = track[0].uri 
+		track = client.get('/tracks', :limit => 10, :order => 'hotness')
+		# track_uri = client.get('me/playlists').first.tracks.first.uri
+		track_uri = track[3].uri 
 		@track_stream = "#{track_uri}/stream?client_id=#{client_id}"
 	
 	

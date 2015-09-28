@@ -1,5 +1,6 @@
 var drawLineTimers = []; // Array of timers.
 var branches = []; // Array of branches
+var branchLimit = 5;
 
 // CLICK EVENT
 var clickedFlag = false;
@@ -16,24 +17,41 @@ var Branch = function( path, origin, direction ) {
   this.direction = direction;
 
   this.listenForClick = function() {
-    console.log("ListenToClick");
+    if ( branchListener() ) {
+      clickedFlag = false;
+      for( x = 0; x < branchLimit; x++ ) {
+        var index = Math.floor(Math.random() * branches.length);
+        if ( branches[index] ) {
+          var randomX = (Math.random() * 6) - 2;
+          var randomY = (Math.random() * 6) - 2;
+          newBranch( { x: branches[index].location.x, y: branches[index].location.y }, { x: randomX, y: randomY } );
+        }
+      }
+    }
+  };
+
+  this.move = function() {
+    var newLocation = this.location.add(this.direction);
+    this.path.lineTo(newLocation);
+    this.location = newLocation;
+    this.listenForClick();
   };
 }
 
 var newBranch = function( origin, direction ) { // Two objects that contain x and y coords
   var path = new paper.Path();
-  path.strokeColor = 'black';
+  var color = '#' + ( function co(lor) { return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length == 6) ?  lor : co(lor); })('');
+  path.strokeColor = color;
   var start = new paper.Point( origin.x, origin.y );  
   path.moveTo(start);
 
   var newBranch = new Branch( path, start, direction );
   branches.push(newBranch);
-  console.log(branches);
 };
 
 var init = function() { // Initializes starting points/branches
   var durationLine = { x: 0, y: 0 };
-  newBranch( durationLine, { x: 1, y: 1 } );
+  newBranch( durationLine, { x: 3, y: 3 } );
 
   renderLines();
 };
@@ -43,16 +61,7 @@ var renderLines = function() {
   var drawLineTimer = setInterval( function() {
     for ( x = 0; x < branches.length; x++ ) {
       var newLocation = branches[x].location.add(branches[x].direction);
-      branches[x].path.lineTo(newLocation);
-      branches[x].location = newLocation;
-      branches[x].listenForClick();
-
-      if ( branchListener() ) {
-        var randomX = Math.floor(Math.random() * 4) - 2;
-        var randomY = Math.floor(Math.random() * 4) - 2;
-        newBranch( { x: branches[x].location.x, y: branches[x].location.y }, { x: randomX, y: randomY } );
-        clickedFlag = false;
-      }
+      branches[x].move();
     }
     paper.view.draw();
   }, 50);

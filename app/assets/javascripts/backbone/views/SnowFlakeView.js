@@ -1,10 +1,48 @@
 var app = app || {};
 
+// var clickedFlag = false;
+// var branchListener = function() {
+//   if (clickedFlag) {
+//     return true;
+//   }
+//   return false;
+// };
+
+var Branch = function( path, origin, direction ) {
+  this.path = path;
+  this.location = origin;
+  this.direction = direction;
+
+  this.listenForClick = function() {
+    if ( branchListener() ) {
+      clickedFlag = false;
+      for( x = 0; x < branchLimit; x++ ) {
+        var index = Math.floor(Math.random() * branches.length);
+        if ( branches[index] ) {
+          var randomX = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+          var randomY = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+          newBranch( { x: branches[index].location.x, y: branches[index].location.y }, { x: randomX, y: randomY } );
+        }
+      }
+    }
+  };
+
+  this.move = function() {
+    var newLocation = this.location.add(this.direction);
+    this.path.lineTo(newLocation);
+    this.location = newLocation;
+    // this.listenForClick();
+  };
+}
+
 app.SnowFlakeView = Backbone.View.extend({
 	el: '#main',
 
 	initialize: function( track ) {
 		this.track = track;
+		this.branches = []; // Array of branches
+		this.renderTimers = []; // Array of timers.
+		// this.renderTimer = null;
 	},
 
 	render: function() {
@@ -13,55 +51,106 @@ app.SnowFlakeView = Backbone.View.extend({
 		this.startMusic();
 	},
 
+
+	newBranch: function( origin, direction ) { // Two objects that contain x and y coords
+		  var path = new paper.Path();
+		  var color = '#' + ( function co(lor) { return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length == 6) ?  lor : co(lor); })('');
+		  path.strokeColor = color;
+		  var start = new paper.Point( origin.x, origin.y );  
+		  path.moveTo(start);
+
+	  var newBranch = new Branch( path, start, direction );
+	  this.branches.push(newBranch);
+		},
+
+	renderLines: function() {
+		var intervalID = this.renderTimer();
+		this.renderTimers.push(this.renderTimer());
+	},
+
+	initMp3Player: function (){
+	  document.getElementById('audio_box').appendChild(this.audio);
+	  this.context = new AudioContext(); // AudioContext object instance
+	  this.analyser = this.context.createAnalyser(); // AnalyserNote method
+	  this.analyser.maxDecibels = -10;
+	  this.analyser.minDecibels = -100;
+	  this.canvas = document.getElementById('analyser_render');
+	  this.ctx = this.canvas.getContext('2d');
+	  paper.setup(this.canvas);  // Sets up a PaperScope, initializes an empty project and a view.
+	  // Re-route audio playback into the processing graph of the audio context
+	  this.source = this.context.createMediaElementSource(this.audio);
+	  this.source.connect(this.analyser);
+	  this.analyser.connect(this.context.destination);
+
+	  var durationLine = { x: 300, y: 300 };
+		this.newBranch( durationLine, { x: 0, y: 1 } );
+		this.newBranch( durationLine, { x: 1, y: 0 } );
+		this.newBranch( durationLine, { x: -5, y: 0 } );
+		this.newBranch( durationLine, { x: 0, y: -5 } );
+
+		this.renderLines();
+
+		this.frameLooper();
+	},
+
+	frameLooper: function (){
+		// debugger;
+		window.requestAnimationFrame( this.frameLooper.bind(this) );
+	  
+	  this.fbc_array = new Uint8Array(this.analyser.frequencyBinCount);
+	  this.analyser.getByteFrequencyData(this.fbc_array);
+	  // console.log(this.context.currentTime)
+	  // ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+	  // ctx.fillStyle = '#00CCFF'; // Color of the bars
+	  // bars = 1024;
+	  // for (var i = 0; i < bars; i++) {
+	  //   bar_x = i;
+	  //   bar_width = 1;
+	  //   bar_height = -(fbc_array[i]);
+	  //   //  fillRect( x, y, width, height ) // Explanation of the parameters below
+	  //   ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
+	  // }
+	},
+
+	renderTimer: function () {
+		var view = this;
+		var interval = setInterval( function() {
+	    for ( x = 0; x < view.branches.length; x++ ) {
+	    	var newLocation = view.branches[x].location.add(view.branches[x].direction);
+	    	// debugger;
+	    	view.branches[x].move();
+	    }
+	   	paper.view.draw();
+ 		}, 50);
+ 		return interval;
+ 	},
+
 	startMusic: function() {
 		// var trackURL = "<%= @track_stream %>";
-		var trackURL = this.track.stream_url + "?client_id=dea3c2dce5d40ad0ee8ef7c8275d8dd5";
+		this.trackURL = this.track.stream_url + "?client_id=dea3c2dce5d40ad0ee8ef7c8275d8dd5";
 
-	  var audio = new Audio();
-	  audio.src = trackURL;
-	  audio.controls = true;
-	  audio.loop = true;
-	  audio.autoplay = true;
-	  audio.crossOrigin="anonymous";
+	  this.audio = new Audio();
+	  this.audio.src = this.trackURL;
+	  this.audio.controls = true;
+	  this.audio.loop = true;
+	  this.audio.autoplay = true;
+	  this.audio.crossOrigin="anonymous";
 
 		  // Establish all variables that analyser will use
-		var canvas, ctx, source, context, analyser, fbc_array, bars, bar_x, bar_width, bar_height;
+		// var canvas, ctx, source, context, analyser, fbc_array, bars, bar_x, bar_width, bar_height;
 
 		//Initialize the MP3 player after the page loads all of its HTML into the window
-		initMp3Player();
-
-		function initMp3Player(){
-		  document.getElementById('audio_box').appendChild(audio);
-		  context = new AudioContext(); // AudioContext object instance
-		  analyser = context.createAnalyser(); // AnalyserNote method
-		  analyser.maxDecibels = -10;
-		  analyser.minDecibels = -100;
-		  canvas = document.getElementById('analyser_render');
-		  ctx = canvas.getContext('2d');
-		  // Re-route audio playback into the processing graph of the audio context
-		  source = context.createMediaElementSource(audio);
-		  source.connect(analyser);
-		  analyser.connect(context.destination);
-		  frameLooper();
-		}
-
-		// frameLooper() animates any style of graphics you wish to the audio frequency
-		// Looping at the default frame rate that the browser provides(approx. 60 FPS)
-		function frameLooper(){
-		  window.requestAnimationFrame(frameLooper);
-		  fbc_array = new Uint8Array(analyser.frequencyBinCount);
-		  analyser.getByteFrequencyData(fbc_array);
-		  ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-		  ctx.fillStyle = '#00CCFF'; // Color of the bars
-		  bars = 1024;
-		  for (var i = 0; i < bars; i++) {
-		    bar_x = i;
-		    bar_width = 1;
-		    bar_height = -(fbc_array[i] / 2);
-		    //  fillRect( x, y, width, height ) // Explanation of the parameters below
-		    ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
-		  }
-		}
-
+		this.initMp3Player();
 	}
+
 });
+
+
+
+
+
+		// var Branch = function( path, origin, direction ) {
+  // 		this.path = path;
+  // 		this.location = origin;
+ 	//  		this.direction = direction;
+		// };

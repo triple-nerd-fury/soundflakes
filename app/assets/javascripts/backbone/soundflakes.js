@@ -6,4 +6,6 @@ _.templateSettings = {
 $(document).ready(function() {
 	app.router = new app.AppRouter();
 	Backbone.history.start();
+  paper.install(window);
+
 });

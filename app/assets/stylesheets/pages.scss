@@ -29,9 +29,9 @@ div#mp3_player {
 	}
 
 	& > canvas {
-		width: 500px; 
-		height: 30px; 
-		background: #002D3C; 
+
+		height: 100vh;
+    width: 100vw;
 		margin: 0 auto;
 	}
 }

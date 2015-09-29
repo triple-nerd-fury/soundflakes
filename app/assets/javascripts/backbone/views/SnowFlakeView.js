@@ -96,27 +96,29 @@ app.SnowFlakeView = Backbone.View.extend({
 
 	frameLooper: function() {
 		// debugger;
-		window.requestAnimationFrame( this.frameLooper.bind(this) );
-	  
-	  this.fbc_array = new Uint8Array(this.analyser.frequencyBinCount);
-	  this.analyser.getByteFrequencyData(this.fbc_array);
-	  // console.log(this.context.currentTime)
-	  // ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-	  // ctx.fillStyle = '#00CCFF'; // Color of the bars
-	  // bars = 1024;
-	  // for (var i = 0; i < bars; i++) {
-	  //   bar_x = i;
-	  //   bar_width = 1;
-	  //   bar_height = -(fbc_array[i]);
-	  //   //  fillRect( x, y, width, height ) // Explanation of the parameters below
-	  //   ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
-	  // }
-
-    for ( x = 0; x < this.branches.length; x++ ) {
-    	var newLocation = this.branches[x].location.add(this.branches[x].direction);
-    	this.branches[x].move();
-    }
-   	paper.view.draw();
+		
+			window.requestAnimationFrame( this.frameLooper.bind(this) );
+		  
+		  this.fbc_array = new Uint8Array(this.analyser.frequencyBinCount);
+		  this.analyser.getByteFrequencyData(this.fbc_array);
+		  // console.log(this.context.currentTime)
+		  // ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+		  // ctx.fillStyle = '#00CCFF'; // Color of the bars
+		  // bars = 1024;
+		  // for (var i = 0; i < bars; i++) {
+		  //   bar_x = i;
+		  //   bar_width = 1;
+		  //   bar_height = -(fbc_array[i]);
+		  //   //  fillRect( x, y, width, height ) // Explanation of the parameters below
+		  //   ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
+		  // }
+	if (!app.snowFlakeView.audio.paused) {
+	    for ( x = 0; x < this.branches.length; x++ ) {
+	    	var newLocation = this.branches[x].location.add(this.branches[x].direction);
+	    	this.branches[x].move();
+	    }
+	   	paper.view.draw();
+   }
 	},
 
 	// renderTimer: function() {

@@ -1,33 +1,13 @@
 var app = app || {};
 
 var throttledGenerate;
-
-// var clickedFlag = false;
-// var branchListener = function() {
-//   if (clickedFlag) {
-//     return true;
-//   }
-//   return false;
-// };
-
 var branchMaxSpeed = 0.1;
+var branchAmount = 5;
 
 var Branch = function( path, origin, direction ) {
   this.path = path;
   this.location = origin;
   this.direction = direction;
-
-  // this.listenForClick = function() {
-  //   clickedFlag = false;
-  //   for( x = 0; x < 5; x++ ) {
-  //     var index = Math.floor(Math.random() * app.snowFlakeView.branches.length);
-  //     if ( app.snowFlakeView.branches[index] ) { // if branch exists in random index
-  //       var randomX = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
-  //       var randomY = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
-  //       app.snowFlakeView.newBranch( { x: app.snowFlakeView.branches[index].location.x, y: app.snowFlakeView.branches[index].location.y }, { x: randomX, y: randomY } );
-  //     }
-		// }
-  // };
 
   this.move = function(fbc_array) {
     var newLocation = this.location.add(this.direction);
@@ -35,22 +15,17 @@ var Branch = function( path, origin, direction ) {
     this.location = newLocation;
    
     this.checkFbc(fbc_array);
+    this.checkLimits();
   };
 
   this.generateNewBranches = function() {  
-  	console.log("Branch Generated");
-  	for( x = 0; x < 5; x++ ) {
-      var index = Math.floor(Math.random() * app.snowFlakeView.branches.length);
+  	for ( x = 0; x < branchAmount; x++ ) {
+      var index = Math.floor(Math.random() * app.snowFlakeView.branches.length); // select random branch from available branches
       if ( app.snowFlakeView.branches[index] ) { // if branch exists in random index
-        // var randomX = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
-        // var randomY = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
-        // app.snowFlakeView.newBranch( { x: app.snowFlakeView.branches[index].location.x, y: app.snowFlakeView.branches[index].location.y }, { x: randomX, y: randomY } );
-
     		var newOrigin = {
 	  			x: app.snowFlakeView.branches[index].location.x,
 	  			y: app.snowFlakeView.branches[index].location.y
 	  		};
-
 	  		var newDirection = {
 	  			x: (Math.random() * 0.6) - 0.3,
 	  			y: (Math.random() * 0.6) - 0.3
@@ -60,14 +35,13 @@ var Branch = function( path, origin, direction ) {
     }
   };
 
-  if ( !throttledGenerate ) { throttledGenerate = _.throttle( this.generateNewBranches, 3000 ); }
+  if ( !throttledGenerate ) { throttledGenerate = _.throttle( this.generateNewBranches, 5000 ); }
 
   this.checkFbc = function(fbc_array) {
   	var total = 0;
   	for ( var x = 0; x < fbc_array.length; x++ ) {
   		total += fbc_array[x];
   	}
-
   	total = total / fbc_array.length;
 
   	if ( total > 60 ) { 
@@ -75,6 +49,14 @@ var Branch = function( path, origin, direction ) {
   	}
   };
 
+  this.checkLimits = function() {
+  	var xLimit = $('#analyser_render').width();
+	  var yLimit = $('#analyser_render').height();
+  	if ( this.location.x <= 0 || this.location.y <= 0 || this.location.x >= xLimit || this.location.y >= yLimit) {
+  		this.direction.x = 0;
+  		this.direction.y = 0;
+  	}
+  };
 }
 
 app.SnowFlakeView = Backbone.View.extend({
@@ -163,11 +145,18 @@ app.SnowFlakeView = Backbone.View.extend({
 	    	// this.branches[x].listenForClick();
 	    }
 	   	paper.view.draw();
+	   	this.onFrame();
    }
 	},
 
+	onFrame: function(event) {
+		for ( x = 0; x < this.branches.length; x++ ) {
+    	this.branches[x].path.strokeColor.hue += 1;
+
+    }
+	},
+
 	startMusic: function() {
-		// var trackURL = "<%= @track_stream %>";
 		this.trackURL = this.track.stream_url + "?client_id=dea3c2dce5d40ad0ee8ef7c8275d8dd5";
 
 	  this.audio = new Audio();
@@ -177,7 +166,7 @@ app.SnowFlakeView = Backbone.View.extend({
 	  this.audio.autoplay = true;
 	  this.audio.crossOrigin="anonymous";
 
-		  // Establish all variables that analyser will use
+		 // Establish all variables that analyser will use
 		// var canvas, ctx, source, context, analyser, fbc_array, bars, bar_x, bar_width, bar_height;
 
 		//Initialize the MP3 player after the page loads all of its HTML into the window

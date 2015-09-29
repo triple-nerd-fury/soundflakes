@@ -1,31 +1,33 @@
 var app = app || {};
 
-// var clickedFlag = false;
-// var branchListener = function() {
-//   if (clickedFlag) {
-//     return true;
-//   }
-//   return false;
-// };
+var clickedFlag = false;
+var branchListener = function() {
+  if (clickedFlag) {
+    return true;
+  }
+  return false;
+};
+
+var branchMaxSpeed = 0.2;
 
 var Branch = function( path, origin, direction ) {
   this.path = path;
   this.location = origin;
   this.direction = direction;
 
-  // this.listenForClick = function() {
-  //   if ( branchListener() ) {
-  //     clickedFlag = false;
-  //     for( x = 0; x < branchLimit; x++ ) {
-  //       var index = Math.floor(Math.random() * branches.length);
-  //       if ( branches[index] ) {
-  //         var randomX = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
-  //         var randomY = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
-  //         newBranch( { x: branches[index].location.x, y: branches[index].location.y }, { x: randomX, y: randomY } );
-  //       }
-  //     }
-  //   }
-  // };
+  this.listenForClick = function() {
+    if ( branchListener() ) {
+      clickedFlag = false;
+      for( x = 0; x < 5; x++ ) {
+        var index = Math.floor(Math.random() * app.snowFlakeView.branches.length);
+        if ( app.snowFlakeView.branches[index] ) {
+          var randomX = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+          var randomY = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+          app.snowFlakeView.newBranch( { x: app.snowFlakeView.branches[index].location.x, y: app.snowFlakeView.branches[index].location.y }, { x: randomX, y: randomY } );
+        }
+      }
+    }
+  };
 
   this.move = function() {
     var newLocation = this.location.add(this.direction);
@@ -33,6 +35,28 @@ var Branch = function( path, origin, direction ) {
     this.location = newLocation;
     // this.listenForClick();
   };
+
+  // this.checkFbc = function(fbc_array) {
+  // 	var total = 0;
+  // 	for ( x = 0; x < fbc_array.length; x++ ) {
+  // 		total += fbc_array[x];
+  // 	}
+
+  // 	total = total / fbc_array.length;
+  // 	console.log(total);
+
+  // 	if ( total > 70 ) {
+  // 		var newOrigin = {
+  // 			x: this.location.x,
+  // 			y: this.location.y
+  // 		};
+  // 		var newDirection = {
+  // 			x: (Math.random() * 0.4) - 0.2,
+  // 			y: (Math.random() * 0.4) - 0.2
+  // 		};
+  // 		app.snowFlakeView.newBranch( newOrigin, newDirection );
+  // 	}
+  // };
 }
 
 app.SnowFlakeView = Backbone.View.extend({
@@ -47,6 +71,16 @@ app.SnowFlakeView = Backbone.View.extend({
 	render: function() {
 		var snowflakeTemplate = $('#snowflakeTemplate').html();
 		this.$el.html( snowflakeTemplate );
+
+	  $("#analyser_render").on('click', function() {
+	    console.log("clicked!");
+	    if (clickedFlag) {
+	      clickedFlag = false;
+	    } else {
+	      clickedFlag = true;
+	    }
+	  });
+
 		this.startMusic();
 	},
 
@@ -76,13 +110,11 @@ app.SnowFlakeView = Backbone.View.extend({
 	  this.source.connect(this.analyser);
 	  this.analyser.connect(this.context.destination);
 
-	  var durationLine = { x: 300, y: 300 };
-		this.newBranch( durationLine, { x: 0, y: this.branchSpeed } );
-		this.newBranch( durationLine, { x: this.branchSpeed, y: 0 } );
-		this.newBranch( durationLine, { x: -(this.branchSpeed), y: 0 } );
-		this.newBranch( durationLine, { x: 0, y: -(this.branchSpeed) } );
+	  var startX = $('#analyser_render').width() / 2;
+	  var startY = $('#analyser_render').height() / 2;
 
-		// this.renderLines();
+	  var durationLine = { x: startX, y: startY };
+		this.newBranch( durationLine, { x: this.branchSpeed, y: 0 } );
 
 		this.frameLooper();
 	},
@@ -109,6 +141,9 @@ app.SnowFlakeView = Backbone.View.extend({
 	    for ( x = 0; x < this.branches.length; x++ ) {
 	    	var newLocation = this.branches[x].location.add(this.branches[x].direction);
 	    	this.branches[x].move();
+
+	    	// this.branches[x].checkFbc(this.fbc_array);
+	    	this.branches[x].listenForClick();
 	    }
 	   	paper.view.draw();
    }

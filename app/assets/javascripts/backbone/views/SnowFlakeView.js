@@ -42,8 +42,6 @@ app.SnowFlakeView = Backbone.View.extend({
 	initialize: function( track ) {
 		this.track = track;
 		this.branches = []; // Array of branches
-		this.renderTimers = []; // Array of timers.
-		// this.renderTimer = null;
 	},
 
 	render: function() {
@@ -63,11 +61,6 @@ app.SnowFlakeView = Backbone.View.extend({
 	  var newBranch = new Branch( path, start, direction );
 	  this.branches.push(newBranch);
 		},
-
-	// renderLines: function() {
-	// 	var intervalID = this.renderTimer();
-	// 	this.renderTimers.push(this.renderTimer());
-	// },
 
 	initMp3Player: function() {
 	  document.getElementById('audio_box').appendChild(this.audio);
@@ -121,19 +114,6 @@ app.SnowFlakeView = Backbone.View.extend({
    }
 	},
 
-	// renderTimer: function() {
-	// 	var view = this;
-	// 	var interval = setInterval( function() {
-	//     for ( x = 0; x < view.branches.length; x++ ) {
-	//     	var newLocation = view.branches[x].location.add(view.branches[x].direction);
-	//     	// debugger;
-	//     	view.branches[x].move();
-	//     }
-	//    	paper.view.draw();
- // 		}, 50);
- // 		return interval;
- // 	},
-
 	startMusic: function() {
 		// var trackURL = "<%= @track_stream %>";
 		this.trackURL = this.track.stream_url + "?client_id=dea3c2dce5d40ad0ee8ef7c8275d8dd5";
@@ -153,13 +133,3 @@ app.SnowFlakeView = Backbone.View.extend({
 	}
 
 });
-
-
-
-
-
-		// var Branch = function( path, origin, direction ) {
-  // 		this.path = path;
-  // 		this.location = origin;
- 	//  		this.direction = direction;
-		// };

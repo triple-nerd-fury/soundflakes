@@ -3,12 +3,17 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 * {
 	font-family: 'Museo Sans', 'Helvetica', sans-serif;
-	color: white;
 }
 
 body {
 	width: 100%;
 	background: #111;
+	&, a, a:hover {
+		color: white;
+	}
+	input, button {
+		color: black;
+	}
 }
 
 div#mp3_player {

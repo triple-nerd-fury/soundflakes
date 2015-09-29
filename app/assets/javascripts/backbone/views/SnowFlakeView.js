@@ -1,62 +1,80 @@
 var app = app || {};
 
-var clickedFlag = false;
-var branchListener = function() {
-  if (clickedFlag) {
-    return true;
-  }
-  return false;
-};
+var throttledGenerate;
 
-var branchMaxSpeed = 0.2;
+// var clickedFlag = false;
+// var branchListener = function() {
+//   if (clickedFlag) {
+//     return true;
+//   }
+//   return false;
+// };
+
+var branchMaxSpeed = 0.1;
 
 var Branch = function( path, origin, direction ) {
   this.path = path;
   this.location = origin;
   this.direction = direction;
 
-  this.listenForClick = function() {
-    if ( branchListener() ) {
-      clickedFlag = false;
-      for( x = 0; x < 5; x++ ) {
-        var index = Math.floor(Math.random() * app.snowFlakeView.branches.length);
-        if ( app.snowFlakeView.branches[index] ) {
-          var randomX = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
-          var randomY = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
-          app.snowFlakeView.newBranch( { x: app.snowFlakeView.branches[index].location.x, y: app.snowFlakeView.branches[index].location.y }, { x: randomX, y: randomY } );
-        }
+  // this.listenForClick = function() {
+  //   clickedFlag = false;
+  //   for( x = 0; x < 5; x++ ) {
+  //     var index = Math.floor(Math.random() * app.snowFlakeView.branches.length);
+  //     if ( app.snowFlakeView.branches[index] ) { // if branch exists in random index
+  //       var randomX = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+  //       var randomY = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+  //       app.snowFlakeView.newBranch( { x: app.snowFlakeView.branches[index].location.x, y: app.snowFlakeView.branches[index].location.y }, { x: randomX, y: randomY } );
+  //     }
+		// }
+  // };
+
+  this.move = function(fbc_array) {
+    var newLocation = this.location.add(this.direction);
+    this.path.lineTo(newLocation);
+    this.location = newLocation;
+   
+    this.checkFbc(fbc_array);
+  };
+
+  this.generateNewBranches = function() {  
+  	console.log("Branch Generated");
+  	for( x = 0; x < 5; x++ ) {
+      var index = Math.floor(Math.random() * app.snowFlakeView.branches.length);
+      if ( app.snowFlakeView.branches[index] ) { // if branch exists in random index
+        // var randomX = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+        // var randomY = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+        // app.snowFlakeView.newBranch( { x: app.snowFlakeView.branches[index].location.x, y: app.snowFlakeView.branches[index].location.y }, { x: randomX, y: randomY } );
+
+    		var newOrigin = {
+	  			x: app.snowFlakeView.branches[index].location.x,
+	  			y: app.snowFlakeView.branches[index].location.y
+	  		};
+
+	  		var newDirection = {
+	  			x: (Math.random() * 0.6) - 0.3,
+	  			y: (Math.random() * 0.6) - 0.3
+	  		};
+	  		app.snowFlakeView.newBranch( newOrigin, newDirection );
       }
     }
   };
 
-  this.move = function() {
-    var newLocation = this.location.add(this.direction);
-    this.path.lineTo(newLocation);
-    this.location = newLocation;
-    // this.listenForClick();
+  if ( !throttledGenerate ) { throttledGenerate = _.throttle( this.generateNewBranches, 3000 ); }
+
+  this.checkFbc = function(fbc_array) {
+  	var total = 0;
+  	for ( var x = 0; x < fbc_array.length; x++ ) {
+  		total += fbc_array[x];
+  	}
+
+  	total = total / fbc_array.length;
+
+  	if ( total > 60 ) { 
+  		throttledGenerate();
+  	}
   };
 
-  // this.checkFbc = function(fbc_array) {
-  // 	var total = 0;
-  // 	for ( x = 0; x < fbc_array.length; x++ ) {
-  // 		total += fbc_array[x];
-  // 	}
-
-  // 	total = total / fbc_array.length;
-  // 	console.log(total);
-
-  // 	if ( total > 70 ) {
-  // 		var newOrigin = {
-  // 			x: this.location.x,
-  // 			y: this.location.y
-  // 		};
-  // 		var newDirection = {
-  // 			x: (Math.random() * 0.4) - 0.2,
-  // 			y: (Math.random() * 0.4) - 0.2
-  // 		};
-  // 		app.snowFlakeView.newBranch( newOrigin, newDirection );
-  // 	}
-  // };
 }
 
 app.SnowFlakeView = Backbone.View.extend({
@@ -140,10 +158,9 @@ app.SnowFlakeView = Backbone.View.extend({
 	if (!app.snowFlakeView.audio.paused) {
 	    for ( x = 0; x < this.branches.length; x++ ) {
 	    	var newLocation = this.branches[x].location.add(this.branches[x].direction);
-	    	this.branches[x].move();
+	    	this.branches[x].move(this.fbc_array);
 
-	    	// this.branches[x].checkFbc(this.fbc_array);
-	    	this.branches[x].listenForClick();
+	    	// this.branches[x].listenForClick();
 	    }
 	   	paper.view.draw();
    }

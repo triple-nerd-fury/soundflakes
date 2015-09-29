@@ -17,14 +17,22 @@
   
 </head>
 <body>
-  <h1>Soundflakes</h1>
-  <nav id="global-nav">
-      <ul>
-      <%= link_to(soundcloud_path) do %>
-        <li>Soundcloud Login</li>
-      <% end %>
-    </ul>
-  </nav>
+  <header id="header">
+    <div id="logo">
+      <h1>Soundflakes</h1>
+    </div>
+
+    <nav id="global-nav">
+        <ul>
+        <a href=""><li>Home</li></a>
+        <a href=""><li>Gallery</li></a>
+        <a href=""><li>Stupid Link</li></a>
+        <%= link_to(soundcloud_path) do %>
+          <li>Soundcloud Login</li>
+        <% end %>
+      </ul>
+    </nav>
+  </header>
 
 	<%= yield %>
 

@@ -5,6 +5,7 @@ app.SearchResultsView = Backbone.View.extend({
 
 	render: function( tracks ) {
 		var searchResultsTemplate = $('#searchResultsTemplate').html();
+		this.$el.empty();
 		this.$el.append( searchResultsTemplate );
 
 		_.each(tracks, function(track) {

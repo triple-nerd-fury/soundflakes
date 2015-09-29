@@ -1,7 +1,7 @@
 var app = app || {};
 
 app.AppView = Backbone.View.extend({
-	el: '#main',
+	el: '#header',
 
 	events: {
 		'click button' : 'search'
@@ -9,7 +9,7 @@ app.AppView = Backbone.View.extend({
 
 	render: function() {
 		var appViewTemplate = $('#appViewTemplate').html();
-		this.$el.html( appViewTemplate );
+		this.$el.append( appViewTemplate );
 	},
 
 	search: function(event) {

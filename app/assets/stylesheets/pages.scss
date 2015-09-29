@@ -3,6 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 * {
 	font-family: 'Museo Sans', 'Helvetica', sans-serif;
+	outline: none;
 }
 
 body {
@@ -16,11 +17,15 @@ body {
 	}
 }
 
+#main {
+	width: 80%;
+	margin: 0 auto;
+}
+
 div#mp3_player {
 	position: fixed;
 	bottom: 0;
 
-	width: 100%; 
 	background: #111; 
 	padding:5px; 
 	margin: 0 auto;
@@ -41,4 +46,79 @@ div#mp3_player {
 .result-name {
 	display: block;
 	margin: 10px 0;
+}
+
+header {
+	padding: 10px 20px;
+	background: #222;
+	#logo {
+		display: inline-block;
+	}
+
+	#global-nav {
+		display: inline-block;
+		ul {
+			list-style: none;
+
+			a {
+				display: inline-block;
+				transition: border 0.3s ease-in;
+				padding: 10px;
+				border-bottom: 1px solid black;
+				text-decoration: none;
+				margin-right: 20px;
+
+				&:hover {
+					border-bottom: 1px solid red;
+				}
+			}
+		}
+	}
+
+	form {
+		display: inline-block;
+		float: right;
+		margin-top: 30px;
+		margin-right: 20px;
+
+		#songSearchInput {
+			width: 200px;
+			border: none;
+			outline: none;
+			border-radius: 5px;
+			padding: 5px 10px;
+		}
+		button {
+			margin: 0;
+			margin-left: 20px;
+			padding: 5px 20px;
+			border-radius: 20px;
+			min-width: 100px;
+			border: 1px solid white;
+			color: white;
+			background: none;
+			transition: all 0.3s ease-in-out;
+			&:hover {
+				color: black;
+				background: white;
+			}
+		}
+	}
+}
+
+#searchResults {
+	margin: 0 auto;
+	text-align: center;
+	a {
+		padding: 20px 20px;
+		margin: 20px 0;
+		border: 1px solid white;
+		border-radius: 20px;
+		transition: all 0.3s ease-in-out;
+		cursor: pointer;
+		&:hover {
+			color: black;
+			background: white;
+		}
+	}
 }

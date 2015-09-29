@@ -13,19 +13,19 @@ var Branch = function( path, origin, direction ) {
   this.location = origin;
   this.direction = direction;
 
-  this.listenForClick = function() {
-    if ( branchListener() ) {
-      clickedFlag = false;
-      for( x = 0; x < branchLimit; x++ ) {
-        var index = Math.floor(Math.random() * branches.length);
-        if ( branches[index] ) {
-          var randomX = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
-          var randomY = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
-          newBranch( { x: branches[index].location.x, y: branches[index].location.y }, { x: randomX, y: randomY } );
-        }
-      }
-    }
-  };
+  // this.listenForClick = function() {
+  //   if ( branchListener() ) {
+  //     clickedFlag = false;
+  //     for( x = 0; x < branchLimit; x++ ) {
+  //       var index = Math.floor(Math.random() * branches.length);
+  //       if ( branches[index] ) {
+  //         var randomX = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+  //         var randomY = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+  //         newBranch( { x: branches[index].location.x, y: branches[index].location.y }, { x: randomX, y: randomY } );
+  //       }
+  //     }
+  //   }
+  // };
 
   this.move = function() {
     var newLocation = this.location.add(this.direction);
@@ -37,6 +37,7 @@ var Branch = function( path, origin, direction ) {
 
 app.SnowFlakeView = Backbone.View.extend({
 	el: '#main',
+	branchSpeed: 0.1,
 
 	initialize: function( track ) {
 		this.track = track;
@@ -63,12 +64,12 @@ app.SnowFlakeView = Backbone.View.extend({
 	  this.branches.push(newBranch);
 		},
 
-	renderLines: function() {
-		var intervalID = this.renderTimer();
-		this.renderTimers.push(this.renderTimer());
-	},
+	// renderLines: function() {
+	// 	var intervalID = this.renderTimer();
+	// 	this.renderTimers.push(this.renderTimer());
+	// },
 
-	initMp3Player: function (){
+	initMp3Player: function() {
 	  document.getElementById('audio_box').appendChild(this.audio);
 	  this.context = new AudioContext(); // AudioContext object instance
 	  this.analyser = this.context.createAnalyser(); // AnalyserNote method
@@ -83,17 +84,17 @@ app.SnowFlakeView = Backbone.View.extend({
 	  this.analyser.connect(this.context.destination);
 
 	  var durationLine = { x: 300, y: 300 };
-		this.newBranch( durationLine, { x: 0, y: 1 } );
-		this.newBranch( durationLine, { x: 1, y: 0 } );
-		this.newBranch( durationLine, { x: -5, y: 0 } );
-		this.newBranch( durationLine, { x: 0, y: -5 } );
+		this.newBranch( durationLine, { x: 0, y: this.branchSpeed } );
+		this.newBranch( durationLine, { x: this.branchSpeed, y: 0 } );
+		this.newBranch( durationLine, { x: -(this.branchSpeed), y: 0 } );
+		this.newBranch( durationLine, { x: 0, y: -(this.branchSpeed) } );
 
-		this.renderLines();
+		// this.renderLines();
 
 		this.frameLooper();
 	},
 
-	frameLooper: function (){
+	frameLooper: function() {
 		// debugger;
 		window.requestAnimationFrame( this.frameLooper.bind(this) );
 	  
@@ -110,20 +111,26 @@ app.SnowFlakeView = Backbone.View.extend({
 	  //   //  fillRect( x, y, width, height ) // Explanation of the parameters below
 	  //   ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
 	  // }
+
+    for ( x = 0; x < this.branches.length; x++ ) {
+    	var newLocation = this.branches[x].location.add(this.branches[x].direction);
+    	this.branches[x].move();
+    }
+   	paper.view.draw();
 	},
 
-	renderTimer: function () {
-		var view = this;
-		var interval = setInterval( function() {
-	    for ( x = 0; x < view.branches.length; x++ ) {
-	    	var newLocation = view.branches[x].location.add(view.branches[x].direction);
-	    	// debugger;
-	    	view.branches[x].move();
-	    }
-	   	paper.view.draw();
- 		}, 50);
- 		return interval;
- 	},
+	// renderTimer: function() {
+	// 	var view = this;
+	// 	var interval = setInterval( function() {
+	//     for ( x = 0; x < view.branches.length; x++ ) {
+	//     	var newLocation = view.branches[x].location.add(view.branches[x].direction);
+	//     	// debugger;
+	//     	view.branches[x].move();
+	//     }
+	//    	paper.view.draw();
+ // 		}, 50);
+ // 		return interval;
+ // 	},
 
 	startMusic: function() {
 		// var trackURL = "<%= @track_stream %>";

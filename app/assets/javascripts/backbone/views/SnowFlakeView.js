@@ -148,25 +148,7 @@ app.SnowFlakeView = Backbone.View.extend({
 		this.trackURL = this.track.stream_url + "?client_id=dea3c2dce5d40ad0ee8ef7c8275d8dd5";
 	  this.audio = new Audio();
 	  this.audio.src = this.trackURL;
-	  $(this.audio).error(function(error) {
-	  	switch (this.networkState) {
-	  		case 0:
-	  			alert("No track available. Try a different track!");
-	  			break;
-	  		case 1:
-	  			alert("Looks like the network is having problems, try a different track!");
-	  			break;
-	  		case 2:
-	  			console.log("Loading track...");
-	  			break;
-	  		case 3:
-	  			alert("There is no source available, try a different track!");
-	  			break;
-	  		default:
-	  			alert("Oops! An error occurred, try a different track!");
-	  			break;
-	  	}
-	  });
+	  this.checkErrors();
 	  this.audio.controls = true;
 	  this.audio.loop = true;
 	  this.audio.autoplay = true;
@@ -179,5 +161,35 @@ app.SnowFlakeView = Backbone.View.extend({
 		$(this.audio).on('canplay', function() {
 			app.snowFlakeView.initMp3Player();
 		});
+	},
+
+	checkErrors: function() {
+	 $(this.audio).error(function(error) {
+  	switch (this.networkState) {
+  		case 0:
+  			alert("No track available. Try a different track!");
+  			var appView = new app.AppView();
+				appView.render()
+  			break;
+  		case 1:
+  			alert("Looks like the network is having problems, try a different track!");
+  			var appView = new app.AppView();
+				appView.render()
+  			break;
+  		case 2:
+  			console.log("Loading track...");
+  			break;
+  		case 3:
+  			alert("There is no source available, try a different track!");
+  			var appView = new app.AppView();
+				appView.render();
+  			break;
+  		default:
+  			alert("Oops! An error occurred, try a different track!");
+  			var appView = new app.AppView();
+				appView.render()
+  			break;
+	  	}
+	  });
 	}
 });

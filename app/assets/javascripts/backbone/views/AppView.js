@@ -8,6 +8,8 @@ app.AppView = Backbone.View.extend({
 	},
 
 	render: function() {
+		$('#searchForm').empty();
+		
 		var appViewTemplate = $('#appViewTemplate').html();
 		this.$el.html( appViewTemplate );
 		$('#songSearchInput-home').focus();

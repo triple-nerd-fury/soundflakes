@@ -1,8 +1,19 @@
 var app = app || {};
 
 var throttledGenerate;
-
+<<<<<<< HEAD
+var branchMaxSpeed = 0.1;
 var branchAmount = 5;
+=======
+
+// var clickedFlag = false;
+// var branchListener = function() {
+//   if (clickedFlag) {
+//     return true;
+//   }
+//   return false;
+// };
+
 var branchMaxSpeed = 0.01;
 var lastShortAvg = 0;
 var lastLongAvg = 0;
@@ -10,6 +21,7 @@ var avg = 0;
 var currentHighest = [];
 var longHistoryArray =[];
 var count = 0;
+>>>>>>> origin/vistest
 
 var Branch = function( path, origin, direction ) {
   this.path = path;
@@ -26,11 +38,20 @@ var Branch = function( path, origin, direction ) {
   };
 
   this.generateNewBranches = function() {  
+<<<<<<< HEAD
+  	for ( x = 0; x < branchAmount; x++ ) {
+      var index = Math.floor(Math.random() * app.snowFlakeView.branches.length); // select random branch from available branches
+      if ( app.snowFlakeView.branches[index] ) { // if branch exists in random index
+=======
   	// console.log("Branch Generated");
-  	// for ( x = 0; x < branchAmount; x++ ) {
-   	//    var index = Math.floor(Math.random() * app.snowFlakeView.branches.length); // select random branch from available branches
-   	//    if ( app.snowFlakeView.branches[index] ) { // if branch exists in random index
   	for( x = 0; x < 1; x++ ) {
+      // var index = Math.floor(Math.random() * app.snowFlakeView.branches.length);
+      // if ( app.snowFlakeView.branches[index] ) { // if branch exists in random index
+        // var randomX = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+        // var randomY = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+        // app.snowFlakeView.newBranch( { x: app.snowFlakeView.branches[index].location.x, y: app.snowFlakeView.branches[index].location.y }, { x: randomX, y: randomY } );
+
+>>>>>>> origin/vistest
     		var newOrigin = {
 	  			x: app.snowFlakeView.branches[0].location.x,
 	  			y: app.snowFlakeView.branches[0].location.y
@@ -44,8 +65,12 @@ var Branch = function( path, origin, direction ) {
     // }
   };
 
+<<<<<<< HEAD
+  if ( !throttledGenerate ) { throttledGenerate = _.throttle( this.generateNewBranches, 5000 ); }
+=======
   if ( !throttledGenerate ) { throttledGenerate = _.throttle( this.generateNewBranches, 1000 ); }
-  
+>>>>>>> origin/vistest
+
   this.checkFbc = function(fbc_array) {
   	var total = 0;
   	for ( var x = 0; x < fbc_array.length; x++ ) {
@@ -123,6 +148,9 @@ var Branch = function( path, origin, direction ) {
   //     }
   //   }
   //    console.log('long' + longHistory)
+
+    
+
   };
 
   this.checkLimits = function() {
@@ -147,6 +175,19 @@ app.SnowFlakeView = Backbone.View.extend({
 	render: function() {
 		var snowflakeTemplate = $('#snowflakeTemplate').html();
 		this.$el.html( snowflakeTemplate );
+<<<<<<< HEAD
+=======
+
+	  $("#analyser_render").on('click', function() {
+	    // console.log("clicked!");
+	    if (clickedFlag) {
+	      clickedFlag = false;
+	    } else {
+	      clickedFlag = true;
+	    }
+	  });
+
+>>>>>>> origin/vistest
 		this.startMusic();
 	},
 
@@ -206,6 +247,9 @@ app.SnowFlakeView = Backbone.View.extend({
           paper.view.draw();
         }, 250);
       }, 2000);
+
+
+
 
       // for ( var i = 1; i < 20; i++ ) {
         // Immediately Invoked Function Expression (IIFE) - Douglas Crockford is the man
@@ -359,6 +403,33 @@ app.SnowFlakeView = Backbone.View.extend({
 	},
 
 	frameLooper: function() {
+<<<<<<< HEAD
+			window.requestAnimationFrame( this.frameLooper.bind(this) );
+		  
+		  this.fbc_array = new Uint8Array(this.analyser.frequencyBinCount);
+		  this.analyser.getByteFrequencyData(this.fbc_array);
+		  // console.log(this.context.currentTime)
+		  // ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+		  // ctx.fillStyle = '#00CCFF'; // Color of the bars
+		  // bars = 1024;
+		  // for (var i = 0; i < bars; i++) {
+		  //   bar_x = i;
+		  //   bar_width = 1;
+		  //   bar_height = -(fbc_array[i]);
+		  //   //  fillRect( x, y, width, height ) // Explanation of the parameters below
+		  //   ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
+		  // }
+	if (!app.snowFlakeView.audio.paused) {
+	    for ( x = 0; x < this.branches.length; x++ ) {
+	    	var newLocation = this.branches[x].location.add(this.branches[x].direction);
+	    	this.branches[x].move(this.fbc_array);
+
+	    	// this.branches[x].listenForClick();
+	    }
+	   	paper.view.draw();
+	   	this.onFrame();
+   }
+=======
 		window.requestAnimationFrame( this.frameLooper.bind(this) );
 
     paper.view.onFrame = function() {
@@ -386,8 +457,18 @@ app.SnowFlakeView = Backbone.View.extend({
       for ( x = 0; x < this.branches.length; x++ ) {
       	var newLocation = this.branches[x].location.add(this.branches[x].direction);
       	this.branches[x].move(this.fbc_array);
+
+      	// this.branches[x].listenForClick();
       }
      	paper.view.draw();
+    }
+>>>>>>> origin/vistest
+	},
+
+	onFrame: function(event) {
+		for ( x = 0; x < this.branches.length; x++ ) {
+    	this.branches[x].path.strokeColor.hue += 1;
+
     }
 	},
 
@@ -401,6 +482,10 @@ app.SnowFlakeView = Backbone.View.extend({
 	  this.audio.autoplay = true;
 	  this.audio.crossOrigin="anonymous";
 
+		 // Establish all variables that analyser will use
+		// var canvas, ctx, source, context, analyser, fbc_array, bars, bar_x, bar_width, bar_height;
+
+		//Initialize the MP3 player after the page loads all of its HTML into the window
 		$(this.audio).on('canplay', function() {
 			app.snowFlakeView.initMp3Player();
 		});

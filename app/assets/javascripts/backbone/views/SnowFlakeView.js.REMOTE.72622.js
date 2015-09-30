@@ -2,7 +2,14 @@ var app = app || {};
 
 var throttledGenerate;
 
-var branchAmount = 5;
+// var clickedFlag = false;
+// var branchListener = function() {
+//   if (clickedFlag) {
+//     return true;
+//   }
+//   return false;
+// };
+
 var branchMaxSpeed = 0.01;
 var lastShortAvg = 0;
 var lastLongAvg = 0;
@@ -16,25 +23,40 @@ var Branch = function( path, origin, direction ) {
   this.location = origin;
   this.direction = direction;
 
+  // this.listenForClick = function() {
+  //   clickedFlag = false;
+  //   for( x = 0; x < 5; x++ ) {
+  //     var index = Math.floor(Math.random() * app.snowFlakeView.branches.length);
+  //     if ( app.snowFlakeView.branches[index] ) { // if branch exists in random index
+  //       var randomX = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+  //       var randomY = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+  //       app.snowFlakeView.newBranch( { x: app.snowFlakeView.branches[index].location.x, y: app.snowFlakeView.branches[index].location.y }, { x: randomX, y: randomY } );
+  //     }
+		// }
+  // };
+
   this.move = function(fbc_array) {
     var newLocation = this.location.add(this.direction);
     this.path.lineTo(newLocation);
     this.location = newLocation;
     
     this.checkFbc(fbc_array);
-    this.checkLimits();
   };
 
   this.generateNewBranches = function() {  
   	// console.log("Branch Generated");
-  	// for ( x = 0; x < branchAmount; x++ ) {
-   	//    var index = Math.floor(Math.random() * app.snowFlakeView.branches.length); // select random branch from available branches
-   	//    if ( app.snowFlakeView.branches[index] ) { // if branch exists in random index
   	for( x = 0; x < 1; x++ ) {
+      // var index = Math.floor(Math.random() * app.snowFlakeView.branches.length);
+      // if ( app.snowFlakeView.branches[index] ) { // if branch exists in random index
+        // var randomX = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+        // var randomY = (Math.random() * (branchMaxSpeed * 2)) - (branchMaxSpeed);
+        // app.snowFlakeView.newBranch( { x: app.snowFlakeView.branches[index].location.x, y: app.snowFlakeView.branches[index].location.y }, { x: randomX, y: randomY } );
+
     		var newOrigin = {
 	  			x: app.snowFlakeView.branches[0].location.x,
 	  			y: app.snowFlakeView.branches[0].location.y
 	  		};
+
 	  		var newDirection = {
 	  			x: (Math.random() * 0.6) - 0.3,
 	  			y: (Math.random() * 0.6) - 0.3
@@ -45,12 +67,13 @@ var Branch = function( path, origin, direction ) {
   };
 
   if ( !throttledGenerate ) { throttledGenerate = _.throttle( this.generateNewBranches, 1000 ); }
-  
+
   this.checkFbc = function(fbc_array) {
   	var total = 0;
   	for ( var x = 0; x < fbc_array.length; x++ ) {
   		total += fbc_array[x];
   	}
+
   	total = total / fbc_array.length;
 
     if (!currentHighest.length){
@@ -123,16 +146,11 @@ var Branch = function( path, origin, direction ) {
   //     }
   //   }
   //    console.log('long' + longHistory)
+
+    
+
   };
 
-  this.checkLimits = function() {
-  	var xLimit = $('#analyser_render').width();
-	  var yLimit = $('#analyser_render').height();
-  	if ( this.location.x <= 0 || this.location.y <= 0 || this.location.x >= xLimit || this.location.y >= yLimit) {
-  		this.direction.x = 0;
-  		this.direction.y = 0;
-  	}
-  };
 }
 
 app.SnowFlakeView = Backbone.View.extend({
@@ -147,6 +165,16 @@ app.SnowFlakeView = Backbone.View.extend({
 	render: function() {
 		var snowflakeTemplate = $('#snowflakeTemplate').html();
 		this.$el.html( snowflakeTemplate );
+
+	  $("#analyser_render").on('click', function() {
+	    // console.log("clicked!");
+	    if (clickedFlag) {
+	      clickedFlag = false;
+	    } else {
+	      clickedFlag = true;
+	    }
+	  });
+
 		this.startMusic();
 	},
 
@@ -206,6 +234,9 @@ app.SnowFlakeView = Backbone.View.extend({
           paper.view.draw();
         }, 250);
       }, 2000);
+
+
+
 
       // for ( var i = 1; i < 20; i++ ) {
         // Immediately Invoked Function Expression (IIFE) - Douglas Crockford is the man
@@ -386,55 +417,31 @@ app.SnowFlakeView = Backbone.View.extend({
       for ( x = 0; x < this.branches.length; x++ ) {
       	var newLocation = this.branches[x].location.add(this.branches[x].direction);
       	this.branches[x].move(this.fbc_array);
+
+      	// this.branches[x].listenForClick();
       }
      	paper.view.draw();
     }
 	},
 
 	startMusic: function() {
+		// var trackURL = "<%= @track_stream %>";
 		this.trackURL = this.track.stream_url + "?client_id=dea3c2dce5d40ad0ee8ef7c8275d8dd5";
+
 	  this.audio = new Audio();
 	  this.audio.src = this.trackURL;
-	  this.checkErrors();
 	  this.audio.controls = true;
 	  this.audio.loop = true;
 	  this.audio.autoplay = true;
 	  this.audio.crossOrigin="anonymous";
 
-		$(this.audio).on('canplay', function() {
-			app.snowFlakeView.initMp3Player();
-		});
-	},
+		  // Establish all variables that analyser will use
+		// var canvas, ctx, source, context, analyser, fbc_array, bars, bar_x, bar_width, bar_height;
 
-	checkErrors: function() {
-	 $(this.audio).error(function(error) {
-  	switch (this.networkState) {
-  		case 0:
-  			alert("No track available. Try a different track!");
-  			var appView = new app.AppView();
-				appView.render()
-  			break;
-  		case 1:
-  			alert("Looks like the network is having problems, try a different track!");
-  			var appView = new app.AppView();
-				appView.render()
-  			break;
-  		case 2:
-  			console.log("Loading track...");
-  			break;
-  		case 3:
-  			alert("There is no source available, try a different track!");
-  			var appView = new app.AppView();
-				appView.render();
-  			break;
-  		default:
-  			alert("Oops! An error occurred, try a different track!");
-  			var appView = new app.AppView();
-				appView.render()
-  			break;
-	  	}
-	  });
+		//Initialize the MP3 player after the page loads all of its HTML into the window
+		this.initMp3Player();
 	}
+
 });
 
 // var inc = 0;

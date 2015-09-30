@@ -68,12 +68,11 @@ header {
 		}
 	}
 
-	form {
+	#searchForm {
 		display: inline-block;
 		float: right;
 		margin-top: 25px;
 		margin-right: 20px;
-
 		#songSearchInput {
 			width: 200px;
 		}

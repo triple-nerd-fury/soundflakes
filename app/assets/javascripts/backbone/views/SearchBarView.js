@@ -1,7 +1,7 @@
 var app = app || {};
 
 app.SearchBarView = Backbone.View.extend({
-	el: '#header',
+	el: '#searchForm',
 
 	events: {
 		'click button' : 'search'
@@ -9,7 +9,7 @@ app.SearchBarView = Backbone.View.extend({
 
 	render: function() {
 		var searchBarTemplate = $('#searchBarTemplate').html();
-		this.$el.append( searchBarTemplate );
+		this.$el.html( searchBarTemplate );
 	},
 
 	search: function(event) {

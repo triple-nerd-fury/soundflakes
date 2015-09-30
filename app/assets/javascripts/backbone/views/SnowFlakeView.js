@@ -228,63 +228,173 @@ app.SnowFlakeView = Backbone.View.extend({
 //     }
 //   },
 
+  // plotIntensity: function() {
+  //   // app.newPath = new Path();
+  //   // app.start = new Point(50,100);
+  //   // app.end = new Point(50, 500);
+  //   // app.newPath.add(app.start);
+  //   // app.newPath.add(app.end);
+  //   // app.newPath.strokeColor = 'pink';
+
+  //   if ( app.newPath ) {
+  //     app.newPath.remove();
+  //     app.newPath_two.remove();
+  //     app.newPath_three.remove();
+  //     app.newPath_four.remove();
+  //   }
+  //   var canvasHeight = $('canvas').height() / 2
+  //   var canvasWidth = $('canvas').width()
+  //   var segments = 100;
+  //   var distance = canvasWidth / segments;
+
+  //   var coordinates = [[0, canvasHeight]];
+  //   var coordinates_two = [[0, canvasHeight]];
+  //   var coordinates_three = [[0, canvasHeight]];
+  //   var coordinates_four = [[0, canvasHeight]];
+
+  //   for (var i = 5; i < segments - 5; i++) {
+  //     var x = i * distance
+  //     var y = canvasHeight + this.fbc_array[i];
+  //     var arrayElement = [x,y]
+  //     coordinates.push(arrayElement);
+  //   }
+
+  //   for (var i = 105; i < segments + 95; i++) {
+  //     var x = (i - 100) * distance
+  //     var y = canvasHeight + parseInt(  this.fbc_array[i] );
+  //     var arrayElement = [x,y]
+  //     coordinates_two.push(arrayElement);
+  //   }
+
+  //   for (var i = 205; i < segments + 195; i++) {
+  //     var x = (i - 200) * distance
+  //     var y = canvasHeight + parseInt(  "-" + this.fbc_array[i] );
+  //     var arrayElement = [x,y]
+  //     coordinates_three.push(arrayElement);
+  //   }
+
+
+  //   for (var i = 305; i < segments + 295; i++) {
+  //     var x = (i - 300) * distance
+  //     var y = canvasHeight + parseInt(  "-" + this.fbc_array[i] );
+  //     var arrayElement = [x,y]
+  //     coordinates_four.push(arrayElement);
+  //   }
+
+  //   coordinates.push([canvasWidth,canvasHeight])
+  //   coordinates_two.push([canvasWidth,canvasHeight])
+  //   coordinates_three.push([canvasWidth,canvasHeight])
+  //   coordinates_four.push([canvasWidth,canvasHeight])
+
+  //   app.newPath = new Path({
+  //     segments: coordinates,
+  //     strokeColor: 'white',
+  //     strokeWidth: 5,
+  //     fillColor: 'white',
+  //     opacity: 0.5,
+  //     closed: true
+  //   });
+
+  //   app.newPath_two = new Path({
+  //     segments: coordinates_two,
+  //     strokeColor: 'white',
+  //     strokeWidth: 5,
+  //     fillColor: 'white',
+  //     opacity: 0.5,
+  //     closed: true
+  //   });
+
+  //   app.newPath_three = new Path({
+  //     segments: coordinates_three,
+  //     strokeColor: 'white',
+  //     strokeWidth: 5,
+  //     fillColor: 'white',
+  //     opacity: 0.5,
+  //     closed: true
+  //   });
+
+  //   app.newPath_four = new Path({
+  //     segments: coordinates_four,
+  //     strokeColor: 'white',
+  //     strokeWidth: 5,
+  //     fillColor: 'white',
+  //     opacity: 0.5,
+  //     closed: true
+  //   });
+
+  //   // // app.newPath_one.rotate(45);
+  //   // app.newPath_two.rotate(45);
+  //   // app.newPath_three.rotate(90);
+  //   // app.newPath_four.rotate(45);
+  //   paper.view.draw();
+  // },
+
   plotIntensity: function() {
-    // app.newPath = new Path();
-    // app.start = new Point(50,100);
-    // app.end = new Point(50, 500);
-    // app.newPath.add(app.start);
-    // app.newPath.add(app.end);
-    // app.newPath.strokeColor = 'pink';
 
     if ( app.newPath ) {
       app.newPath.remove();
-      app.newPath_two.remove();
-      app.newPath_three.remove();
-      app.newPath_four.remove();
+      app.newPathFlip.remove();
+      app.groupTwo.remove();
+      app.groupThree.remove();
+      app.groupFour.remove();
+      app.groupFive.remove();
+      app.groupSix.remove();
+      // app.newPath_two.remove();
+      // app.newPath_three.remove();
+      // app.newPath_four.remove();
     }
     var canvasHeight = $('canvas').height() / 2
     var canvasWidth = $('canvas').width()
-    var segments = 100;
+    var segments = 200  ;
     var distance = canvasWidth / segments;
 
     var coordinates = [[0, canvasHeight]];
-    var coordinates_two = [[0, canvasHeight]];
-    var coordinates_three = [[0, canvasHeight]];
-    var coordinates_four = [[0, canvasHeight]];
+    var coordinatesFlip = [[0, canvasHeight]];
+    // var coordinates_two = [[0, canvasHeight]];
+    // var coordinates_three = [[0, canvasHeight]];
+    // var coordinates_four = [[0, canvasHeight]];
 
     for (var i = 5; i < segments - 5; i++) {
       var x = i * distance
-      var y = canvasHeight + this.fbc_array[i];
+      var y = canvasHeight - 80 + this.fbc_array[i];
       var arrayElement = [x,y]
       coordinates.push(arrayElement);
     }
 
-    for (var i = 105; i < segments + 95; i++) {
-      var x = (i - 100) * distance
-      var y = canvasHeight + parseInt(  this.fbc_array[i] );
+     for (var i = 5; i < segments - 5; i++) {
+      var x = i * distance
+      var y = canvasHeight + 80 + parseInt( "-" + this.fbc_array[i]);
       var arrayElement = [x,y]
-      coordinates_two.push(arrayElement);
+      coordinatesFlip.push(arrayElement);
     }
 
-    for (var i = 205; i < segments + 195; i++) {
-      var x = (i - 200) * distance
-      var y = canvasHeight + parseInt(  "-" + this.fbc_array[i] );
-      var arrayElement = [x,y]
-      coordinates_three.push(arrayElement);
-    }
+    // for (var i = 105; i < segments + 95; i++) {
+    //   var x = (i - 100) * distance
+    //   var y = canvasHeight + parseInt(  this.fbc_array[i] );
+    //   var arrayElement = [x,y]
+    //   coordinates_two.push(arrayElement);
+    // }
+
+    // for (var i = 205; i < segments + 195; i++) {
+    //   var x = (i - 200) * distance
+    //   var y = canvasHeight + parseInt(  "-" + this.fbc_array[i] );
+    //   var arrayElement = [x,y]
+    //   coordinates_three.push(arrayElement);
+    // }
 
 
-    for (var i = 305; i < segments + 295; i++) {
-      var x = (i - 300) * distance
-      var y = canvasHeight + parseInt(  "-" + this.fbc_array[i] );
-      var arrayElement = [x,y]
-      coordinates_four.push(arrayElement);
-    }
+    // for (var i = 305; i < segments + 295; i++) {
+    //   var x = (i - 300) * distance
+    //   var y = canvasHeight + parseInt(  "-" + this.fbc_array[i] );
+    //   var arrayElement = [x,y]
+    //   coordinates_four.push(arrayElement);
+    // }
 
     coordinates.push([canvasWidth,canvasHeight])
-    coordinates_two.push([canvasWidth,canvasHeight])
-    coordinates_three.push([canvasWidth,canvasHeight])
-    coordinates_four.push([canvasWidth,canvasHeight])
+    coordinatesFlip.push([canvasWidth,canvasHeight])
+    // coordinates_two.push([canvasWidth,canvasHeight])
+    // coordinates_three.push([canvasWidth,canvasHeight])
+    // coordinates_four.push([canvasWidth,canvasHeight])
 
     app.newPath = new Path({
       segments: coordinates,
@@ -293,10 +403,10 @@ app.SnowFlakeView = Backbone.View.extend({
       fillColor: 'white',
       opacity: 0.5,
       closed: true
-    });
+    });  
 
-    app.newPath_two = new Path({
-      segments: coordinates_two,
+    app.newPathFlip = new Path({
+      segments: coordinatesFlip,
       strokeColor: 'white',
       strokeWidth: 5,
       fillColor: 'white',
@@ -304,28 +414,55 @@ app.SnowFlakeView = Backbone.View.extend({
       closed: true
     });
 
-    app.newPath_three = new Path({
-      segments: coordinates_three,
-      strokeColor: 'white',
-      strokeWidth: 5,
-      fillColor: 'white',
-      opacity: 0.5,
-      closed: true
-    });
+    app.group = new Group([app.newPath, app.newPathFlip])
+    app.group.scale(.4)
+    app.group.rotate(90)
 
-    app.newPath_four = new Path({
-      segments: coordinates_four,
-      strokeColor: 'white',
-      strokeWidth: 5,
-      fillColor: 'white',
-      opacity: 0.5,
-      closed: true
-    });
+    app.groupTwo = app.group.clone()
+    app.groupTwo.rotate(60)
 
-    // // app.newPath_one.rotate(45);
-    // app.newPath_two.rotate(45);
-    // app.newPath_three.rotate(90);
-    // app.newPath_four.rotate(45);
+    app.groupThree = app.group.clone()
+    app.groupThree.rotate(120)
+
+    app.groupFour = app.group.clone()
+    app.groupFour.rotate(180)
+
+    app.groupFive = app.group.clone()
+    app.groupFive.rotate(240)
+
+    app.groupSix = app.group.clone()
+    app.groupSix.rotate(300)
+    // app.newPathFlip.scale(.5)
+    // app.newPathFlip.rotate(90)
+
+   
+    // app.newPath_two = new Path({
+    //   segments: coordinates_two,
+    //   strokeColor: 'blue',
+    //   strokeWidth: 5,
+    //   fillColor: 'blue',
+    //   opacity: 0.5,
+    //   closed: true
+    // });
+
+    // app.newPath_three = new Path({
+    //   segments: coordinates_three,
+    //   strokeColor: 'white',
+    //   strokeWidth: 5,
+    //   fillColor: 'white',
+    //   opacity: 0.5,
+    //   closed: true
+    // });
+
+    // app.newPath_four = new Path({
+    //   segments: coordinates_four,
+    //   strokeColor: 'white',
+    //   strokeWidth: 5,
+    //   fillColor: 'white',
+    //   opacity: 0.5,
+    //   closed: true
+    // });
+  
     paper.view.draw();
   },
 
@@ -448,6 +585,7 @@ app.SnowFlakeView = Backbone.View.extend({
 //   }
 //   inc++;
 // }, 250);
+
 
 
 

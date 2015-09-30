@@ -71,16 +71,6 @@ app.SnowFlakeView = Backbone.View.extend({
 	render: function() {
 		var snowflakeTemplate = $('#snowflakeTemplate').html();
 		this.$el.html( snowflakeTemplate );
-
-	  $("#analyser_render").on('click', function() {
-	    console.log("clicked!");
-	    if (clickedFlag) {
-	      clickedFlag = false;
-	    } else {
-	      clickedFlag = true;
-	    }
-	  });
-
 		this.startMusic();
 	},
 
@@ -120,8 +110,6 @@ app.SnowFlakeView = Backbone.View.extend({
 	},
 
 	frameLooper: function() {
-		// debugger;
-		
 			window.requestAnimationFrame( this.frameLooper.bind(this) );
 		  
 		  this.fbc_array = new Uint8Array(this.analyser.frequencyBinCount);
@@ -158,9 +146,27 @@ app.SnowFlakeView = Backbone.View.extend({
 
 	startMusic: function() {
 		this.trackURL = this.track.stream_url + "?client_id=dea3c2dce5d40ad0ee8ef7c8275d8dd5";
-
 	  this.audio = new Audio();
 	  this.audio.src = this.trackURL;
+	  $(this.audio).error(function(error) {
+	  	switch (this.networkState) {
+	  		case 0:
+	  			alert("No track available. Try a different track!");
+	  			break;
+	  		case 1:
+	  			alert("Looks like the network is having problems, try a different track!");
+	  			break;
+	  		case 2:
+	  			console.log("Loading track...");
+	  			break;
+	  		case 3:
+	  			alert("There is no source available, try a different track!");
+	  			break;
+	  		default:
+	  			alert("Oops! An error occurred, try a different track!");
+	  			break;
+	  	}
+	  });
 	  this.audio.controls = true;
 	  this.audio.loop = true;
 	  this.audio.autoplay = true;
@@ -170,7 +176,8 @@ app.SnowFlakeView = Backbone.View.extend({
 		// var canvas, ctx, source, context, analyser, fbc_array, bars, bar_x, bar_width, bar_height;
 
 		//Initialize the MP3 player after the page loads all of its HTML into the window
-		this.initMp3Player();
+		$(this.audio).on('canplay', function() {
+			app.snowFlakeView.initMp3Player();
+		});
 	}
-
 });

@@ -1,6 +1,7 @@
 // Place all the styles related to the Pages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
 * {
 	font-family: 'Museo Sans', 'Helvetica', sans-serif;
 	outline: none;
@@ -8,12 +9,30 @@
 
 body {
 	width: 100%;
-	background: #111;
+	background: #222;
 	&, a, a:hover {
 		color: white;
 	}
+
 	input, button {
-		color: black;
+		border: 1px solid white;
+		background: none;
+		color: white;		
+		transition: all 0.3s ease-in-out;
+		padding: 10px;
+	}
+	input:focus {
+		background: #333;
+	}
+	button {
+		margin: 0;
+		margin-left: 20px;
+		padding: 5px 20px;
+		min-width: 100px;
+		&:hover {
+			color: black;
+			background: white;
+		}
 	}
 }
 
@@ -22,35 +41,10 @@ body {
 	margin: 0 auto;
 }
 
-div#mp3_player {
-	position: fixed;
-	bottom: 0;
-
-	background: #111; 
-	padding:5px; 
-	margin: 0 auto;
-
-
-	& > div > audio {
-		width: 100%; 
-		background: #111; 
-	}
-
-	& > canvas {
-		height: 80vh;
-    width: 80vw;
-		margin: 0 auto;
-	}
-}
-
-.result-name {
-	display: block;
-	margin: 10px 0;
-}
+// Header
 
 header {
 	padding: 10px 20px;
-	background: #222;
 	#logo {
 		display: inline-block;
 	}
@@ -59,7 +53,6 @@ header {
 		display: inline-block;
 		ul {
 			list-style: none;
-
 			a {
 				display: inline-block;
 				transition: border 0.3s ease-in;
@@ -78,33 +71,82 @@ header {
 	form {
 		display: inline-block;
 		float: right;
-		margin-top: 30px;
+		margin-top: 25px;
 		margin-right: 20px;
 
 		#songSearchInput {
 			width: 200px;
-			border: none;
-			outline: none;
-			border-radius: 5px;
-			padding: 5px 10px;
-		}
-		button {
-			margin: 0;
-			margin-left: 20px;
-			padding: 5px 20px;
-			border-radius: 20px;
-			min-width: 100px;
-			border: 1px solid white;
-			color: white;
-			background: none;
-			transition: all 0.3s ease-in-out;
-			&:hover {
-				color: black;
-				background: white;
-			}
 		}
 	}
 }
+
+// Footer
+
+footer {
+	position: fixed;
+	z-index: 0;
+	width: 100%;
+	bottom: 0;
+	background: #111;
+	height: 34px;
+}
+
+// Landing Page
+	
+#landing {
+	text-align: center;
+	h1 {
+		margin-top: 25%;
+		font-size: 3rem;
+		text-transform: uppercase;
+	}
+	
+	p {
+		margin: 20px;
+	}
+
+	input#songSearchInput-home {
+		width: 300px;
+	}
+
+	button, #songSearchInput-home {
+		-webkit-animation: bounce 1000ms linear both;
+  	animation: bounce 1000ms linear both;
+	}
+
+
+}
+
+///////////////
+
+div#mp3_player {
+	z-index: 1000;
+	position: fixed;
+	bottom: 0;
+
+	background: #111; 
+	margin: 0 auto;
+
+	& > div > audio {
+		width: 100%; 
+		background: #111; 
+	}
+
+	& > canvas {
+		height: 80vh;
+    width: 80vw;
+		margin: 0 auto;
+		background: #222;
+		border: 1px solid #333;
+	}
+}
+
+.result-name {
+	display: block;
+	margin: 10px 0;
+}
+
+
 
 #searchResults {
 	margin: 0 auto;
@@ -122,3 +164,58 @@ header {
 		}
 	}
 }
+
+
+// Loading Screen
+
+
+// ANIMATIONS
+
+/* Generated with Bounce.js. Edit at http://goo.gl/y3FSYm */
+
+
+
+.animation-target {
+  -webkit-animation: animation 1500ms linear both;
+  animation: animation 1500ms linear both;
+}
+
+/* Generated with Bounce.js. Edit at http://goo.gl/bcuWs0 */
+
+@-webkit-keyframes bounce { 
+  0% { -webkit-transform: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  4.7% { -webkit-transform: matrix3d(0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  9.41% { -webkit-transform: matrix3d(0.883, 0, 0, 0, 0, 0.883, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.883, 0, 0, 0, 0, 0.883, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  14.11% { -webkit-transform: matrix3d(1.141, 0, 0, 0, 0, 1.141, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.141, 0, 0, 0, 0, 1.141, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  18.72% { -webkit-transform: matrix3d(1.212, 0, 0, 0, 0, 1.212, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.212, 0, 0, 0, 0, 1.212, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  24.32% { -webkit-transform: matrix3d(1.151, 0, 0, 0, 0, 1.151, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.151, 0, 0, 0, 0, 1.151, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  29.93% { -webkit-transform: matrix3d(1.048, 0, 0, 0, 0, 1.048, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.048, 0, 0, 0, 0, 1.048, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  35.54% { -webkit-transform: matrix3d(0.979, 0, 0, 0, 0, 0.979, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.979, 0, 0, 0, 0, 0.979, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  41.04% { -webkit-transform: matrix3d(0.961, 0, 0, 0, 0, 0.961, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.961, 0, 0, 0, 0, 0.961, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  52.15% { -webkit-transform: matrix3d(0.991, 0, 0, 0, 0, 0.991, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.991, 0, 0, 0, 0, 0.991, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  63.26% { -webkit-transform: matrix3d(1.007, 0, 0, 0, 0, 1.007, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.007, 0, 0, 0, 0, 1.007, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  85.49% { -webkit-transform: matrix3d(0.999, 0, 0, 0, 0, 0.999, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.999, 0, 0, 0, 0, 0.999, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  100% { -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); } 
+}
+
+@keyframes bounce { 
+  0% { -webkit-transform: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  4.7% { -webkit-transform: matrix3d(0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  9.41% { -webkit-transform: matrix3d(0.883, 0, 0, 0, 0, 0.883, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.883, 0, 0, 0, 0, 0.883, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  14.11% { -webkit-transform: matrix3d(1.141, 0, 0, 0, 0, 1.141, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.141, 0, 0, 0, 0, 1.141, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  18.72% { -webkit-transform: matrix3d(1.212, 0, 0, 0, 0, 1.212, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.212, 0, 0, 0, 0, 1.212, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  24.32% { -webkit-transform: matrix3d(1.151, 0, 0, 0, 0, 1.151, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.151, 0, 0, 0, 0, 1.151, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  29.93% { -webkit-transform: matrix3d(1.048, 0, 0, 0, 0, 1.048, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.048, 0, 0, 0, 0, 1.048, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  35.54% { -webkit-transform: matrix3d(0.979, 0, 0, 0, 0, 0.979, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.979, 0, 0, 0, 0, 0.979, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  41.04% { -webkit-transform: matrix3d(0.961, 0, 0, 0, 0, 0.961, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.961, 0, 0, 0, 0, 0.961, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  52.15% { -webkit-transform: matrix3d(0.991, 0, 0, 0, 0, 0.991, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.991, 0, 0, 0, 0, 0.991, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  63.26% { -webkit-transform: matrix3d(1.007, 0, 0, 0, 0, 1.007, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.007, 0, 0, 0, 0, 1.007, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  85.49% { -webkit-transform: matrix3d(0.999, 0, 0, 0, 0, 0.999, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.999, 0, 0, 0, 0, 0.999, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  100% { -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); } 
+}
+
+
+
+
+
+////////////////

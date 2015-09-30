@@ -1,21 +1,20 @@
 var app = app || {};
 
-app.AppView = Backbone.View.extend({
-	el: '#main',
+app.SearchBarView = Backbone.View.extend({
+	el: '#header',
 
 	events: {
 		'click button' : 'search'
 	},
 
 	render: function() {
-		var appViewTemplate = $('#appViewTemplate').html();
-		this.$el.html( appViewTemplate );
-		$('#songSearchInput-home').focus();
+		var searchBarTemplate = $('#searchBarTemplate').html();
+		this.$el.append( searchBarTemplate );
 	},
 
 	search: function(event) {
 		event.preventDefault();
-		var query = $('#songSearchInput-home').val();
+		var query = $('#songSearchInput').val();
 		var view = this;
 
 		SC.initialize({

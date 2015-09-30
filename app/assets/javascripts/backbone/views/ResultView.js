@@ -16,7 +16,6 @@ app.ResultView = Backbone.View.extend({
 		var thisResultView = this;
 		$resultsTemplate.on('click', function() {
 			console.log(thisResultView.track.title);
-
 			app.snowFlakeView = new app.SnowFlakeView( thisResultView.track );
 			app.snowFlakeView.render();
 		});

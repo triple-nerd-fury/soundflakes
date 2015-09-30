@@ -1,7 +1,18 @@
 <div id="main"></div>
 
 <script id="appViewTemplate" type="javascript/underscore">
-  <form>
+	<div id="landing">
+		<h1>Visualize your music</h1>
+		<p>Start by searching for a track on Soundcloud:</p>
+	  <form id="homepage-search">
+	    <input id="songSearchInput-home" type="text" placeholder="Ed Sheeran"></input>
+	    <button> Search Song </button>
+	  </form>
+	</div>	
+</script>
+
+<script id="searchBarTemplate" type="javascript/underscore">
+  <form id="homepage-search">
     <input id="songSearchInput" type="text" placeholder="Search Soundcloud..."></input>
     <button> Search Song </button>
   </form>
@@ -23,5 +34,11 @@
 	<div id="mp3_player">
 		<canvas id="analyser_render"></canvas>
 	  <div id="audio_box"></div>
+	</div>
+</script>
+
+<script id="loadingTemplate" type="javascript/underscore">
+	<div id="loader">
+		LOADING
 	</div>
 </script>

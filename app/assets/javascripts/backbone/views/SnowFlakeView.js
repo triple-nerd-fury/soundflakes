@@ -100,7 +100,7 @@ var Branch = function( path, origin, direction ) {
       if (historyArray.length > 100) {
       historyArray.shift();
     }
-  } 
+   
 
   if (longHistoryArray.length > 1000) {
     longHistoryArray.shift();
@@ -109,7 +109,7 @@ var Branch = function( path, origin, direction ) {
   //   superLongHistoryArray.push(longHistoryArray);
   // } 
 
-    // avg = total
+    avg = total
     count += 1
     var shortHistory = 0;
     for (i = 0; i < historyArray.length; i++) {
@@ -124,10 +124,14 @@ var Branch = function( path, origin, direction ) {
       }
     }
      console.log('long' + longHistory)
-   
+
+    var myCircle = new Path.Circle(new Point(100, 70), shortHistory/historyArray.length);
+    myCircle.fillColor = 'red';
+    
+
   };
 
-// }
+}
 
 app.SnowFlakeView = Backbone.View.extend({
 	el: '#main',

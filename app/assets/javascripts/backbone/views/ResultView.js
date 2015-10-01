@@ -16,6 +16,11 @@ app.ResultView = Backbone.View.extend({
 		var thisResultView = this;
 		$resultsTemplate.on('click', function() {
 			console.log(thisResultView.track.title);
+			if ( app.snowFlakeView ) {
+				app.snowFlakeView.disable();
+				paper.project.activeLayer.clear()
+				// app.paper.clear();
+			}
 			app.snowFlakeView = new app.SnowFlakeView( thisResultView.track );
 			app.snowFlakeView.render();
 		});

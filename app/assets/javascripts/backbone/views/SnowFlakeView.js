@@ -1,5 +1,5 @@
 var app = app || {};
-
+var color = 'green';
 var throttledGenerate;
 
 var branchAmount = 5;
@@ -149,6 +149,11 @@ app.SnowFlakeView = Backbone.View.extend({
 		this.$el.html( snowflakeTemplate );
 		this.startMusic();
 	},
+
+  disable: function () {
+    $("mp3_player").remove();
+    app.snowflake.remove(); 
+  },
 
 
 	// newBranch: function( origin, direction ) { // Two objects that contain x and y coords
@@ -332,89 +337,52 @@ app.SnowFlakeView = Backbone.View.extend({
   plotIntensity: function() {
 
     if ( app.newPath ) {
-      app.newPath.remove();
-      app.newPathFlip.remove();
-      app.groupTwo.remove();
-      app.groupThree.remove();
-      app.groupFour.remove();
-      app.groupFive.remove();
-      app.groupSix.remove();
-      // app.newPath_two.remove();
-      // app.newPath_three.remove();
-      // app.newPath_four.remove();
+      app.snowflake.remove();  
     }
+
     var canvasHeight = $('canvas').height() / 2
     var canvasWidth = $('canvas').width()
-    var segments = 200  ;
+    var segments = 100  ;
     var distance = canvasWidth / segments;
 
     var coordinates = [[0, canvasHeight]];
     var coordinatesFlip = [[0, canvasHeight]];
-    // var coordinates_two = [[0, canvasHeight]];
-    // var coordinates_three = [[0, canvasHeight]];
-    // var coordinates_four = [[0, canvasHeight]];
 
-    for (var i = 5; i < segments - 5; i++) {
-      var x = i * distance
-      var y = canvasHeight - 80 + this.fbc_array[i];
-      var arrayElement = [x,y]
-      coordinates.push(arrayElement);
+    if (this.fbc_array) {
+
+      _.each(_.range(5, segments - 5), function(num) {
+        var x = num * distance
+        var y = canvasHeight - 80 + app.snowFlakeView.fbc_array[num];     
+        var yInverse = canvasHeight + 80 + parseInt( "-" + app.snowFlakeView.fbc_array[num]);
+        var arrayElement = [x,y]
+        var arrayElementInverse = [x,yInverse]
+        coordinates.push(arrayElement);
+        coordinatesFlip.push(arrayElementInverse);
+      })
     }
-
-     for (var i = 5; i < segments - 5; i++) {
-      var x = i * distance
-      var y = canvasHeight + 80 + parseInt( "-" + this.fbc_array[i]);
-      var arrayElement = [x,y]
-      coordinatesFlip.push(arrayElement);
-    }
-
-    // for (var i = 105; i < segments + 95; i++) {
-    //   var x = (i - 100) * distance
-    //   var y = canvasHeight + parseInt(  this.fbc_array[i] );
-    //   var arrayElement = [x,y]
-    //   coordinates_two.push(arrayElement);
-    // }
-
-    // for (var i = 205; i < segments + 195; i++) {
-    //   var x = (i - 200) * distance
-    //   var y = canvasHeight + parseInt(  "-" + this.fbc_array[i] );
-    //   var arrayElement = [x,y]
-    //   coordinates_three.push(arrayElement);
-    // }
-
-
-    // for (var i = 305; i < segments + 295; i++) {
-    //   var x = (i - 300) * distance
-    //   var y = canvasHeight + parseInt(  "-" + this.fbc_array[i] );
-    //   var arrayElement = [x,y]
-    //   coordinates_four.push(arrayElement);
-    // }
 
     coordinates.push([canvasWidth,canvasHeight])
     coordinatesFlip.push([canvasWidth,canvasHeight])
-    // coordinates_two.push([canvasWidth,canvasHeight])
-    // coordinates_three.push([canvasWidth,canvasHeight])
-    // coordinates_four.push([canvasWidth,canvasHeight])
 
-    app.newPath = new Path({
+    app.newPath = new app.paper.Path({
       segments: coordinates,
       strokeColor: 'white',
-      strokeWidth: 5,
+      strokeWidth: 2,
       fillColor: 'white',
       opacity: 0.5,
       closed: true
     });  
 
-    app.newPathFlip = new Path({
+    app.newPathFlip = new app.paper.Path({
       segments: coordinatesFlip,
       strokeColor: 'white',
-      strokeWidth: 5,
+      strokeWidth: 2,
       fillColor: 'white',
       opacity: 0.5,
       closed: true
     });
 
-    app.group = new Group([app.newPath, app.newPathFlip])
+    app.group = new app.paper.Group([app.newPath, app.newPathFlip])
     app.group.scale(.4)
     app.group.rotate(90)
 
@@ -432,49 +400,75 @@ app.SnowFlakeView = Backbone.View.extend({
 
     app.groupSix = app.group.clone()
     app.groupSix.rotate(300)
-    // app.newPathFlip.scale(.5)
-    // app.newPathFlip.rotate(90)
 
-   
-    // app.newPath_two = new Path({
-    //   segments: coordinates_two,
-    //   strokeColor: 'blue',
-    //   strokeWidth: 5,
-    //   fillColor: 'blue',
-    //   opacity: 0.5,
-    //   closed: true
-    // });
+    //vertical group
+    app.groupVertical = new app.paper.Group([app.group, app.groupFour])
+    app.groupSixty = new app.paper.Group([app.groupTwo, app.groupFive])
+    app.groupOneTwenty = new app.paper.Group([app.groupThree, app.groupSix])    
 
-    // app.newPath_three = new Path({
-    //   segments: coordinates_three,
-    //   strokeColor: 'white',
-    //   strokeWidth: 5,
-    //   fillColor: 'white',
-    //   opacity: 0.5,
-    //   closed: true
-    // });
-
-    // app.newPath_four = new Path({
-    //   segments: coordinates_four,
-    //   strokeColor: 'white',
-    //   strokeWidth: 5,
-    //   fillColor: 'white',
-    //   opacity: 0.5,
-    //   closed: true
-    // });
+    app.snowflake = new app.paper.Group([app.groupVertical, app.groupSixty, app.groupOneTwenty])
   
-    paper.view.draw();
+    app.snowflake.onMouseDown = function(event) {
+      app.copy = this.clone();
+      app.copy.scale(0.2,0.2);
+      var x = Math.floor(Math.random() * 1000)
+      var y = Math.floor(Math.random() * 1000)
+      console.log(x)
+      app.copy.position = new app.paper.Point( x, y );
+
+      console.log('click')
+    }
+
+    // mypapers.push(mypaper);
+    // var color = Math.random() > 0.5 ? 'green' : 'red';
+
+    // app.path = new app.paper.Path.Circle({
+    //   center: [80 * Math.random(), 50],
+    //   radius: Math.random() > 0.5 ? 35 : 100,
+    //   fillColor: color
+    // });
+
+    app.paper.view.draw();
   },
 
 	initMp3Player: function() {
+    console.log("INIT MP3 PLAYER CALLED");
 	  document.getElementById('audio_box').appendChild(this.audio);
+    if ( this.context ) {
+      this.context = null;
+    }
 	  this.context = new AudioContext(); // AudioContext object instance
 	  this.analyser = this.context.createAnalyser(); // AnalyserNote method
 	  this.analyser.maxDecibels = -10;
 	  this.analyser.minDecibels = -100;
 	  this.canvas = document.getElementById('analyser_render');
 	  this.ctx = this.canvas.getContext('2d');
-	  paper.setup(this.canvas);  // Sets up a PaperScope, initializes an empty project and a view.
+
+
+    // this.scope = new paper.PaperScope();
+    // this.scope.setup( $("canvas")[0] );
+
+
+    // var mypapers = [];
+    app.paper = new paper.PaperScope();
+    app.paper.setup($("canvas")[0]);
+
+    // mypapers.push(mypaper);
+    // var color = Math.random() > 0.5 ? 'green' : 'red';
+
+    // app.path = new app.paper.Path.Circle({
+    //   center: [80 * Math.random(), 50],
+    //   radius: Math.random() > 0.5 ? 35 : 100,
+    //   fillColor: color
+    // });
+
+    // paper.view.draw();
+    app.paper.view.draw();
+
+
+
+
+	  // paper.setup(this.canvas);  // Sets up a PaperScope, initializes an empty project and a view.
 	  // Re-route audio playback into the processing graph of the audio context
 
 	  this.source = this.context.createMediaElementSource(this.audio);
@@ -495,17 +489,26 @@ app.SnowFlakeView = Backbone.View.extend({
 	},
 
 	frameLooper: function() {
-		window.requestAnimationFrame( this.frameLooper.bind(this) );
+    var view = this;
+    if ( app.animationFrame ) {
+      this.context = null;
+      window.cancelAnimationFrame( app.animationFrame );
+      app.animationFrame = window.requestAnimationFrame( view.frameLooper.bind(view) );
+    } else {
+      app.animationFrame = window.requestAnimationFrame( view.frameLooper.bind(view) );
+    }
 
-    paper.view.onFrame = function() {
+    app.paper.view.onFrame = function() {
       // On each frame, rotate the path by 3 degrees:
       // path.rotate(3);
+      // console.log("alknalkn")
       app.snowFlakeView.plotIntensity();
     }
 
-	  this.fbc_array = new Uint8Array(this.analyser.frequencyBinCount);
+	  view.fbc_array = new Uint8Array(view.analyser.frequencyBinCount);
+
     app.snowFlakeView.plotIntensity();
-	  this.analyser.getByteFrequencyData(this.fbc_array);
+	  view.analyser.getByteFrequencyData(view.fbc_array);
     // debugger;
 	  // console.log(this.context.currentTime)
 	  // ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
@@ -528,6 +531,7 @@ app.SnowFlakeView = Backbone.View.extend({
 	},
 
 	startMusic: function() {
+    console.log( "START MUSIC CALLED" )
 		this.trackURL = this.track.stream_url + "?client_id=dea3c2dce5d40ad0ee8ef7c8275d8dd5";
 	  this.audio = new Audio();
 	  this.audio.src = this.trackURL;

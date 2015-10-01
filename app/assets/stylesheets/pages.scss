@@ -39,6 +39,9 @@ body {
 #main {
 	width: 80%;
 	margin: 0 auto;
+	.search-title {
+		text-align: center;
+	}
 }
 
 // Header
@@ -138,6 +141,8 @@ div#mp3_player {
 	border: 1px solid #333;
 }
 
+// Results
+
 .result-name {
 	display: block;
 	margin: 10px 0;
@@ -149,10 +154,10 @@ div#mp3_player {
 	margin: 0 auto;
 	text-align: center;
 	a {
+		max-width: 600px;
 		padding: 20px 20px;
-		margin: 20px 0;
+		margin: 20px auto;
 		border: 1px solid white;
-		border-radius: 20px;
 		transition: all 0.3s ease-in-out;
 		cursor: pointer;
 		&:hover {
@@ -168,6 +173,38 @@ div#mp3_player {
 // Track Info
  #track-info {
  	width: 100%;
+ 	min-height: 80px;
+
+ 	#track-details, #visual-controls {
+ 		display: inline-block;
+ 	}
+	
+	#track-details {
+		h3, p {
+			margin: 0;
+		}
+	}
+
+	#visual-controls {
+		float: right;
+		margin-top: 10px;
+
+		input[type='radio'] {
+			display:none;
+			& + label {
+				min-width: 100px;
+				border: 1px solid white;
+				padding: 10px 20px;
+
+				transition: all 0.3s ease-in-out;
+			}
+
+			&:checked + label {
+				background: white;
+				color: black;
+			}
+		}
+	}
  }
 
 // ANIMATIONS

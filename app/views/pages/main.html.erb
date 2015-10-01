@@ -6,7 +6,7 @@
 		<h1>Visualize your music</h1>
 		<p>Start by searching for a track on Soundcloud:</p>
 	  <form id="homepage-search">
-	    <input id="songSearchInput-home" type="text" placeholder="Ed Sheeran"></input>
+	    <input id="songSearchInput-home" type="text" placeholder="Moonlight Sonata"></input>
 	    <button> Search Song </button>
 	  </form>
 	</div>	
@@ -20,7 +20,7 @@
 </script>
 
 <script id="searchResultsTemplate" type="javascript/underscore">
-	<h2>Search Results: </h2>
+	<h2 class="search-title">Search Results: </h2>
 	<div id="searchResults">
 
 	</div>
@@ -48,8 +48,10 @@
 
 <script id="trackInfoTemplate" type="javascript/underscore">
 	<div id="track-info">
-		<h3 class="track-name"></h3>
-		<p class="track-artist"></p>
+		<div id="track-details">
+			<h3 class="track-name"></h3>
+			<p class="track-artist"></p>
+		</div>	
 
 		<div id="visual-controls">
 		</div>
@@ -57,7 +59,7 @@
 </script>
 
 <script id="visualControlTemplate" type="javascript/underscore">
-	<input type="radio" name="visual-buttons" id="snowflake-visual" checked="checked">Snowflake</input>
-	<input type="radio" name="visual-buttons" id="wave-visual">Wave</input>
+	<input type="radio" name="visual-buttons" id="snowflake-visual" checked="checked"><label for="snowflake-visual">Snowflake</label>
+	<input type="radio" name="visual-buttons" id="wave-visual"><label for="wave-visual">Wave</label>
 </script>
 

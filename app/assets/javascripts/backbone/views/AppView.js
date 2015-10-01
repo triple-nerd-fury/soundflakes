@@ -24,7 +24,6 @@ app.AppView = Backbone.View.extend({
 
 		spotifyApi.searchTracks(query)
 	  .then(function(data) {
-	  	debugger;
 	    if ( data.tracks.items.length !== 0 ) {
 					var searchResultsView = new app.SearchResultsView();
 					searchResultsView.render( data.tracks.items );

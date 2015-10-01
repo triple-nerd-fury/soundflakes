@@ -1,5 +1,4 @@
 var app = app || {};
-
 var throttledGenerate;
 
 var branchAmount = 5;
@@ -237,6 +236,7 @@ app.SnowFlakeView = Backbone.View.extend({
 //   },
 
   visualiser: function() {
+    playing = true;
     // app.newPath = new Path();
     // app.start = new Point(50,100);
     // app.end = new Point(50, 500);
@@ -386,7 +386,7 @@ app.SnowFlakeView = Backbone.View.extend({
     });
 
     app.group = new app.paper.Group([app.newPath, app.newPathFlip])
-    app.group.scale(.4)
+    app.group.scale(.5)
     app.group.rotate(90)
 
     app.groupTwo = app.group.clone()
@@ -429,6 +429,11 @@ app.SnowFlakeView = Backbone.View.extend({
   },
 
 	initMp3Player: function() {
+    playing = true;
+     if ( this.context ) {
+      this.context = null;
+    }
+
 	  document.getElementById('audio_box').appendChild(this.audio);
 	  this.context = new AudioContext(); // AudioContext object instance
 	  this.analyser = this.context.createAnalyser(); // AnalyserNote method
@@ -474,10 +479,10 @@ app.SnowFlakeView = Backbone.View.extend({
       app.snowFlakeView.visualiser();
     }
 
-    if (app.snowflake) {
-    app.snowflake.rotate(moveFlake);
-     moveFlake += 1;
-   }
+   //  if (app.snowflake) {
+   //  app.snowflake.rotate(moveFlake);
+   //   moveFlake += 1;
+   // }
   },
 
 	frameLooper: function() {
@@ -521,8 +526,11 @@ app.SnowFlakeView = Backbone.View.extend({
 	  this.audio.autoplay = true;
 	  this.audio.crossOrigin="anonymous";
 
+
 		$(this.audio).on('canplay', function() {
-			app.snowFlakeView.initMp3Player();
+      if ( !playing ) {
+  			app.snowFlakeView.initMp3Player();
+      }
 		});
 	},
 

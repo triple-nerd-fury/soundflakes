@@ -12,8 +12,8 @@ app.TrackInfoView = Backbone.View.extend({
 		var trackInfoTemplate = $('#trackInfoTemplate').html();
 
 		$trackInfoTemplate = $(trackInfoTemplate);
-		$trackInfoTemplate.find('.track-name').text( this.track.title );
-		$trackInfoTemplate.find('.track-artist').text( this.track.user.username );
+		$trackInfoTemplate.find('.track-name').text( this.track.name );
+		$trackInfoTemplate.find('.track-artist').text( this.track.artists[0].name );
 
 		this.$el.prepend( $trackInfoTemplate );
 

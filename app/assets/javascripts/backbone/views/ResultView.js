@@ -12,11 +12,11 @@ app.ResultView = Backbone.View.extend({
 		var resultsTemplate = $('#resultTemplate').html();
 
 		$resultsTemplate = $(resultsTemplate);
-		$resultsTemplate.text(this.track.title);
+		$resultsTemplate.text(this.track.artists[0].name + " - " + this.track.name);
 
 		var thisResultView = this;
 		$resultsTemplate.on('click', function() {
-			console.log(thisResultView.track.title);
+			console.log(thisResultView.track.artists[0].name + " - " + thisResultView.track.name);
 			if ( playing ) {
 				playing = false;
 			}

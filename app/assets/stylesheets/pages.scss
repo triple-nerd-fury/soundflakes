@@ -117,22 +117,25 @@ div#mp3_player {
 	z-index: 1000;
 	position: fixed;
 	bottom: 0;
-
+	left: 0;
+	right: 0;
+	
 	background: #111; 
-	margin: 0 auto;
+	
 
 	& > div > audio {
 		width: 100%; 
 		background: #111; 
 	}
+}
 
-	& > canvas {
-		height: 80vh;
-    width: 80vw;
-		margin: 0 auto;
-		background: #222;
-		border: 1px solid #333;
-	}
+// Canvas
+#analyser_render {
+	height: 80vh;
+  width: 80vw;
+	margin: 0 auto;
+	background: #222;
+	border: 1px solid #333;
 }
 
 .result-name {
@@ -162,6 +165,10 @@ div#mp3_player {
 
 // Loading Screen
 
+// Track Info
+ #track-info {
+ 	width: 100%;
+ }
 
 // ANIMATIONS
 

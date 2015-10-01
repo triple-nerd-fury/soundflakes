@@ -31,11 +31,13 @@
 </script>
 
 <script id="snowflakeTemplate" type="javascript/underscore">
-
 	<div id="mp3_player">
-		<canvas id="analyser_render"></canvas>
 	  <div id="audio_box"></div>
 	</div>
+</script>
+
+<script id="snowflakeCanvasTemplate" type="javascript/underscore">
+	<canvas id="analyser_render" resize></canvas>
 </script>
 
 <script id="loadingTemplate" type="javascript/underscore">
@@ -43,3 +45,19 @@
 		LOADING
 	</div>
 </script>
+
+<script id="trackInfoTemplate" type="javascript/underscore">
+	<div id="track-info">
+		<h3 class="track-name"></h3>
+		<p class="track-artist"></p>
+
+		<div id="visual-controls">
+		</div>
+	</div>
+</script>
+
+<script id="visualControlTemplate" type="javascript/underscore">
+	<input type="radio" name="visual-buttons" id="snowflake-visual">Snowflake</input>
+	<input type="radio" name="visual-buttons" id="wave-visual">Wave</input>
+</script>
+

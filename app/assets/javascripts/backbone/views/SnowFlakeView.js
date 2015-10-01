@@ -147,6 +147,13 @@ app.SnowFlakeView = Backbone.View.extend({
 	render: function() {
 		var snowflakeTemplate = $('#snowflakeTemplate').html();
 		this.$el.html( snowflakeTemplate );
+
+		var snowflakeCanvasTemplate = $('#snowflakeCanvasTemplate').html();
+		this.$el.append( snowflakeCanvasTemplate );
+
+		var trackInfoView = new app.TrackInfoView( this.track );
+		trackInfoView.render();
+
 		this.startMusic();
 	},
 
@@ -345,7 +352,7 @@ app.SnowFlakeView = Backbone.View.extend({
     }
     var canvasHeight = $('canvas').height() / 2
     var canvasWidth = $('canvas').width()
-    var segments = 200  ;
+    var segments = 100;
     var distance = canvasWidth / segments;
 
     var coordinates = [[0, canvasHeight]];

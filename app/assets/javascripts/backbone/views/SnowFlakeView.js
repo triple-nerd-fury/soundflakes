@@ -1,4 +1,5 @@
 var app = app || {};
+
 var throttledGenerate;
 
 var lastShortAvg = 0;
@@ -8,6 +9,19 @@ var currentHighest = [];
 var longHistoryArray =[];
 var moveFlake = 0;
 var count = 0;
+
+window.requestAnimFrame = (function(){ 
+    return (
+        window.requestAnimationFrame       || 
+        window.webkitRequestAnimationFrame || 
+        window.mozRequestAnimationFrame    || 
+        window.oRequestAnimationFrame      || 
+        window.msRequestAnimationFrame     || 
+        function(/* function */ callback){
+            window.setTimeout(callback, 1000 / 60);
+        }
+    );
+})();
 
 app.SnowFlakeView = Backbone.View.extend({
 	el: '#main',
@@ -195,19 +209,22 @@ app.SnowFlakeView = Backbone.View.extend({
 
     app.snowflake = new app.paper.Group([app.groupVertical, app.groupSixty, app.groupOneTwenty])
   
-    app.snowflake.onMouseDown = function(event) {
+    app.snowflake.onMouseDown = function() {
       app.copy = this.clone();
       app.copy.scale(0.2,0.2);
       var x = Math.floor(Math.random() * $("canvas").width())
       var y = Math.floor(Math.random() * $("canvas").height())
+
       app.copy.position = new app.paper.Point( 100, 100 );
 
       app.myCircle = new app.paper.Path.Circle(new app.paper.Point(100, 70), 5);
       app.myCircle.fillColor = 'red';
 
       app.paper.view.draw();
+
+      app.copy.position = new app.paper.Point(x,y);
     } 
-   app.paper.view.draw();
+   // app.paper.view.draw();
   },
 
 	initMp3Player: function() {
@@ -250,10 +267,14 @@ app.SnowFlakeView = Backbone.View.extend({
       app.paper.project.clear()
       app.snowFlakeView.visualiser();
     }
+    if (app.snowflake) {
+      app.snowflake.rotate(moveFlake);
+      moveFlake += 0.5;
+   }
   },
 
 	frameLooper: function() {
-		window.requestAnimationFrame( this.frameLooper.bind(this) );
+		window.requestAnimFrame( this.frameLooper.bind(this) );
 
     app.paper.view.on({
       frame: this.paperFrame
